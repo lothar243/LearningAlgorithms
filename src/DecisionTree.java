@@ -27,7 +27,7 @@ import java.util.Arrays;
 public class DecisionTree {
     public static void main(String[] args) {
         boolean verbose = false;
-        int maxDepth = -1;
+        boolean showDecisionTree = false;
         float sufficientEntropy = 0;
         final String helpString = "\nUsage: ./DecisionTree.sh trainingData.csv testData.csv <optional arguments>\n\n" +
                 "Decision Tree implementation: Uses ID3, a greedy algorithm that prefers questions that maximize" +
@@ -35,6 +35,8 @@ public class DecisionTree {
                 "Optional Arguments: \n" +
                 "\t-v, --verbose\n" +
                 "\t\tverbose - show more information\n" +
+                "\t-tree\n" +
+                "\t\tshow full decision tree" +
                 "\t-e FLOAT" +
                 "\t\tspecify a sufficient entropyOf, range 0 - 1 (Default 0: Completely homogeneous data)";
         if (args.length < 2) {
@@ -46,13 +48,12 @@ public class DecisionTree {
         try {
             for (int argNum = 2; argNum < args.length; argNum++) {
                 switch (args[argNum]) {
-                    case "-d":
-                        maxDepth = Integer.parseInt(args[argNum + 1]);
-                        argNum++;
-                        break;
                     case "-v":
                     case "--verbose":
                         verbose = true;
+                        break;
+                    case "-tree":
+                        showDecisionTree = true;
                         break;
                     case "-e":
                         sufficientEntropy = Float.parseFloat(args[argNum + 1]);
@@ -75,12 +76,28 @@ public class DecisionTree {
         Data trainingData = new Data();
         FileIO.readFromFile(args[0], trainingData);
 
-        Node rootNode = new Node(trainingData, 0);
-        System.out.println(rootNode.displayTree());
+        Node rootNode = new Node(trainingData, sufficientEntropy);
+        if(showDecisionTree)
+            System.out.println(rootNode.displayTree());
 
 
         Data testData = new Data(trainingData.attributeNames, trainingData.classifications);
         FileIO.readFromFile(args[1], testData);
+
+        int numPointsTested = 0;
+        int numPointsCorrectlyClassified = 0;
+        for(DataPoint testPoint: testData.dataPoints) {
+            numPointsTested++;
+            int predictedIndex = rootNode.predictClassIndex(testPoint);
+            if(predictedIndex == testPoint.classificationIndex)
+                numPointsCorrectlyClassified++;
+            else if(verbose)
+                System.out.println("Item wrongly classified as " + trainingData.classifications.get(predictedIndex)
+                        + " (" + testPoint.toString() + ": " + trainingData.classifications.get(testPoint.classificationIndex) + ")");
+
+        }
+        double accuracy = 100f * numPointsCorrectlyClassified / numPointsTested;
+        System.out.println("Accuracy: " + accuracy + "%");
 
 
     }
@@ -288,25 +305,43 @@ public class DecisionTree {
         }
 
         public String displayTree() {
-            String output = toStringSummary() + "\n";
+            String output = toStringSummary() + " split on " + splitAttribute + ":\n";
             if(childNodes == null) return output;
-            for(Node childNode: childNodes) {
-                output += childNode.displayTree("\t");
+            for (int i = 0; i < childNodes.size(); i++) {
+                output += childNodes.get(i).displayTree("\t", "" + splitAttributeValue.get(i));
             }
             return output;
         }
 
-        public String displayTree(String linePrefix) {
-            String output = linePrefix + toStringSummary() + "\n";
+        public String displayTree(String repeatedLinePrefix, String singlePrefix) {
+            String output = repeatedLinePrefix + singlePrefix + " " + toStringSummary() + " split on " + splitAttribute + "\n";
             if(childNodes == null) return output;
-            for(Node childNode: childNodes) {
-                output += childNode.displayTree(linePrefix + "\t");
+            for (int i = 0; i < childNodes.size(); i++) {
+                output += childNodes.get(i).displayTree(repeatedLinePrefix + "\t", "" + splitAttributeValue.get(i));
             }
             return output;
+        }
+
+        public int predictClassIndex(DataPoint dataPoint) {
+            if(childNodes == null) return voteByCount(); // there are no further child nodes, take a popular vote
+            int childNodeIndex = splitAttributeValue.indexOf(dataPoint.attributes[splitAttribute]);
+            if(childNodeIndex == -1) return voteByCount(); // this value wasn't seen in the training data, take a popular vote
+            return childNodes.get(childNodeIndex).predictClassIndex(dataPoint);
+        }
+
+        public int voteByCount() {
+            int predictedClassIndex = 0;
+            int numVotes = 0;
+            for(int i = 0; i < numPointsPerClass.length; i++) {
+                if(numPointsPerClass[i] > numVotes) {
+                    numVotes = numPointsPerClass[i];
+                    predictedClassIndex = i;
+                }
+            }
+            return predictedClassIndex;
         }
 
     }
 
-    
 
 }
