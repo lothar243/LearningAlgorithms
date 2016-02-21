@@ -35,6 +35,16 @@ public class MyTools {
         }
         return output;
     }
+    public static String arrayToString(int[] objects, String delimiter) {
+        if(objects == null || objects.length == 0) {
+            return "";
+        }
+        String output = "" + objects[0];
+        for (int i = 1; i < objects.length; i++) {
+            output += delimiter + objects[i];
+        }
+        return output;
+    }
 
     public static String leftPad(String string, int targetSize) {
         if(string == null) {
@@ -46,6 +56,16 @@ public class MyTools {
         return string;
     }
 
+    public static ArrayList<Integer> copyOf(ArrayList<Integer> original) {
+        ArrayList<Integer> duplicate = new ArrayList<>();
+        for(Integer value: original) {
+            duplicate.add(value);
+        }
+        return duplicate;
+    }
 
+    public static void incrementAtIndex(ArrayList<Integer> list, int index) {
+        list.set(index, list.get(index) + 1);
+    }
 
 }
