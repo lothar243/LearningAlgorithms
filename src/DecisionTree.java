@@ -73,17 +73,21 @@ public class DecisionTree {
             System.exit(0);
 
         }
+
+        // read in training data from file
         Data trainingData = new Data();
         FileIO.readFromFile(args[0], trainingData);
 
+        // build the decision tree
         Node rootNode = new Node(trainingData, sufficientEntropy);
         if(showDecisionTree)
             System.out.println(rootNode.displayTree());
 
-
+        // read in test data from file
         Data testData = new Data(trainingData.attributeNames, trainingData.classifications);
         FileIO.readFromFile(args[1], testData);
 
+        // predict classes of test data and report the accuracy
         int numPointsTested = 0;
         int numPointsCorrectlyClassified = 0;
         for(DataPoint testPoint: testData.dataPoints) {
@@ -103,9 +107,9 @@ public class DecisionTree {
     }
 
     /**
-     * Calculate entropyOf
+     * Calculate entropy of a set of points
      * @param dataPoints the datapoints in the current set
-     * @return the entropyOf of a given set of dataPoints
+     * @return the entropy of a given set of dataPoints
      */
     public static double entropyOf(ArrayList<DataPoint> dataPoints, int numClasses) {
         Integer[] classCounts = tallyClasses(dataPoints, numClasses);
@@ -134,6 +138,10 @@ public class DecisionTree {
             return 0;
         }
         return entropy / Math.log(numClasses); // dividing by this log converts the base of all the above logs
+    }
+
+    public static double informationGain(double startingEntropy, ArrayList<ArrayList<DataPoint>> listsAfterSplit, int numClasses) {
+        return startingEntropy - Node.weightedAverageOfEntropies(listsAfterSplit, numClasses);
     }
 
     /**
@@ -196,7 +204,7 @@ public class DecisionTree {
 
         public void generateChildNodes(ArrayList<DataPoint> dataPoints, ArrayList<Integer> remainingAttributes, double sufficientEntropy) {
             if(dataPoints == null || dataPoints.size() == 0 || remainingAttributes.size() == 0 || entropy <= sufficientEntropy) return;
-            double lowestEntropy = 2;
+            double lowestEntropy = 2; // the lowest entropy of a split corresponds to the highest information gain
             int bestAttribute = -1;
             ArrayList<Integer> bestChildRemainingAttributes = new ArrayList<>();
             ArrayList<ArrayList<DataPoint>> bestDataSplit = new ArrayList<>();
@@ -262,7 +270,7 @@ public class DecisionTree {
         public String toStringSummary() {
             String output = "";
             for (int i = 0; i < numPointsPerClass.length; i++) {
-                output += i + "-" + numPointsPerClass[i] + " ";
+                output += i + ":" + numPointsPerClass[i] + ", ";
             }
             output += "Entropy: " + entropy;
             return output;
@@ -305,7 +313,11 @@ public class DecisionTree {
         }
 
         public String displayTree() {
-            String output = toStringSummary() + " split on " + splitAttribute + ":\n";
+            String output = "Class counts: " + toStringSummary();
+            if(splitAttribute >= 0)
+                output += " split on attribute with index " + splitAttribute + "\n";
+            else
+                output += "\n";
             if(childNodes == null) return output;
             for (int i = 0; i < childNodes.size(); i++) {
                 output += childNodes.get(i).displayTree("\t", "" + splitAttributeValue.get(i));
@@ -314,7 +326,11 @@ public class DecisionTree {
         }
 
         public String displayTree(String repeatedLinePrefix, String singlePrefix) {
-            String output = repeatedLinePrefix + singlePrefix + " " + toStringSummary() + " split on " + splitAttribute + "\n";
+            String output = repeatedLinePrefix + "Value of attribute: " + singlePrefix + ", Class counts: " + toStringSummary();
+            if(splitAttribute >= 0)
+                output += " split on attribute with index " + splitAttribute + "\n";
+            else
+                output += "\n";
             if(childNodes == null) return output;
             for (int i = 0; i < childNodes.size(); i++) {
                 output += childNodes.get(i).displayTree(repeatedLinePrefix + "\t", "" + splitAttributeValue.get(i));
