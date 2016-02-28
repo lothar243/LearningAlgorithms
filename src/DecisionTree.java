@@ -1,3 +1,5 @@
+import com.sun.istack.internal.Nullable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -81,7 +83,7 @@ public class DecisionTree {
         // build the decision tree
         Node rootNode = new Node(trainingData, sufficientEntropy);
         if(showDecisionTree)
-            System.out.println(rootNode.displayTree());
+            System.out.println(rootNode.displayTree(trainingData.classifications, trainingData.attributeNames));
 
         // read in test data from file
         Data testData = new Data(trainingData.attributeNames, trainingData.classifications);
@@ -142,6 +144,9 @@ public class DecisionTree {
 
     public static double informationGain(double startingEntropy, ArrayList<ArrayList<DataPoint>> listsAfterSplit, int numClasses) {
         return startingEntropy - Node.weightedAverageOfEntropies(listsAfterSplit, numClasses);
+    }
+    public static double informationGain(Node node) {
+        return node.entropy - Node.weightedAverageOfChildNodes(node.childNodes);
     }
 
     /**
@@ -272,10 +277,16 @@ public class DecisionTree {
             for (int i = 0; i < numPointsPerClass.length; i++) {
                 output += i + ":" + numPointsPerClass[i] + ", ";
             }
-            output += "Entropy: " + entropy;
+            output += "Entropy: " + MyTools.roundTo(entropy, 4);
             return output;
-
-
+        }
+        public String toStringSummary(ArrayList<String> classNames) {
+            String output = "";
+            for (int i = 0; i < numPointsPerClass.length; i++) {
+                output += classNames.get(i) + ":" + numPointsPerClass[i] + ", ";
+            }
+            output += "Entropy: " + MyTools.roundTo(entropy, 4);
+            return output;
         }
 
         public int totalClassifiedPoints() {
@@ -312,28 +323,34 @@ public class DecisionTree {
             return totalEntropy / numPointsTotal;
         }
 
-        public String displayTree() {
-            String output = "Class counts: " + toStringSummary();
-            if(splitAttribute >= 0)
-                output += " split on attribute with index " + splitAttribute + "\n";
+        public String displayTree(ArrayList<String> classificationNames, String[] attributeNames) {
+            String output = "Class counts: " + toStringSummary(classificationNames);
+            if(splitAttribute >= 0) {
+                output += " split on attribute: \"" + attributeNames[this.splitAttribute] + "\" for an IG of " +
+                        MyTools.roundTo(informationGain(this), 4) + "\n";
+            }
             else
                 output += "\n";
             if(childNodes == null) return output;
             for (int i = 0; i < childNodes.size(); i++) {
-                output += childNodes.get(i).displayTree("\t", "" + splitAttributeValue.get(i));
+                output += childNodes.get(i).displayTree(".\t", splitAttributeValue.get(i), classificationNames, attributeNames);
             }
             return output;
         }
 
-        public String displayTree(String repeatedLinePrefix, String singlePrefix) {
-            String output = repeatedLinePrefix + "Value of attribute: " + singlePrefix + ", Class counts: " + toStringSummary();
+        public String displayTree(String repeatedLinePrefix, double attributeValue,
+                                  @Nullable ArrayList<String> classificationNames, @Nullable String[] attributeNames) {
+            String output = repeatedLinePrefix + "Value of attribute: " + attributeValue + ", " + "Class counts: " +
+                    toStringSummary(classificationNames);
             if(splitAttribute >= 0)
-                output += " split on attribute with index " + splitAttribute + "\n";
+                output += " split on attribute: \"" + attributeNames[this.splitAttribute] + "\" for an IG of " +
+                          MyTools.roundTo(informationGain(this), 4) + "\n";
             else
                 output += "\n";
             if(childNodes == null) return output;
             for (int i = 0; i < childNodes.size(); i++) {
-                output += childNodes.get(i).displayTree(repeatedLinePrefix + "\t", "" + splitAttributeValue.get(i));
+                output += childNodes.get(i).displayTree(repeatedLinePrefix + ".\t", splitAttributeValue.get(i),
+                        classificationNames, attributeNames);
             }
             return output;
         }

@@ -68,4 +68,9 @@ public class MyTools {
         list.set(index, list.get(index) + 1);
     }
 
+
+    public static double roundTo(double num, int places) {
+        double powerOfTen = Math.pow(10, places);
+        return Math.round(num * powerOfTen) / powerOfTen;
+    }
 }
