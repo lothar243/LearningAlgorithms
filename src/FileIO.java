@@ -1,9 +1,6 @@
 import com.opencsv.CSVReader;
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 
 import java.io.FileReader;
-import java.util.ArrayList;
 
 /**
  * Read fruit data from file
@@ -18,7 +15,7 @@ public class FileIO {
      * 4.81647192,2.347954131,125.5081887,25.01441448,apple
      * 4.327248484,3.322961013,118.4265761,19.07534923,peach
      */
-    public static boolean readFromFile(String fileName, @NotNull Data data) {
+    public static boolean readFromFile(String fileName, Data data) {
 
         try {
             CSVReader reader = new CSVReader(new FileReader(fileName));

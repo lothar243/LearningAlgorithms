@@ -1,12 +1,10 @@
-import com.sun.istack.internal.Nullable;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
  * Creates a decision tree using the ID3 algorithm - a greedy algorithm that maximizes
  * information gain per node in the tree. It then uses this decision tree to predict the
- * class of the test data
+ * class of the test data. My program isn't exactly the same, but follows the same logic
  *
  * The pseudocode for a version of the ID3 algorithm follows, but this was implemented
  * id3 (S, attributes yet to be processed)
@@ -207,6 +205,13 @@ public class DecisionTree {
             this.entropy = entropyOf(dataPoints, classValues.length);
         }
 
+        /**
+         * Looks through all of the remaining attributes and chooses the one that results in the lowest weighted
+         * average of entropies of it's child nodes - this is equivalent to the largest information gain
+         * @param dataPoints The datapoints of the current node
+         * @param remainingAttributes The attributes that haven't yet been selected on
+         * @param sufficientEntropy
+         */
         public void generateChildNodes(ArrayList<DataPoint> dataPoints, ArrayList<Integer> remainingAttributes, double sufficientEntropy) {
             if(dataPoints == null || dataPoints.size() == 0 || remainingAttributes.size() == 0 || entropy <= sufficientEntropy) return;
             double lowestEntropy = 2; // the lowest entropy of a split corresponds to the highest information gain
@@ -339,7 +344,7 @@ public class DecisionTree {
         }
 
         public String displayTree(String repeatedLinePrefix, double attributeValue,
-                                  @Nullable ArrayList<String> classificationNames, @Nullable String[] attributeNames) {
+                                  ArrayList<String> classificationNames, String[] attributeNames) {
             String output = repeatedLinePrefix + "Value of attribute: " + attributeValue + ", " + "Class counts: " +
                     toStringSummary(classificationNames);
             if(splitAttribute >= 0)
