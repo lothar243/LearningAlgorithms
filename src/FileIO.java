@@ -51,8 +51,8 @@ public class FileIO {
 
 
     private static DataPoint parseAttributes(String[] line) {
-        // each of the arguments in the first n-1 columns is a double
-        double [] attributes = new double[line.length - 1];
+        // each of the arguments in the first n-1 columns is a Double
+        Double [] attributes = new Double[line.length - 1];
         for (int i = 0; i < line.length - 1; i++) {
             attributes[i] = Double.parseDouble(line[i]);
         }

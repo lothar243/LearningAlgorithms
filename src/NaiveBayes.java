@@ -176,7 +176,7 @@ public class NaiveBayes {
             Integer[] binIndices = new Integer[numAttributes];
             for (int i = 0; i < numAttributes; i++) {
                 // calculate which bin the datapoint should be in
-                int currentIndex = (int) ((dataPoint.attributes[i] - minValues[i]) / binSizes[i]);
+                int currentIndex = (int) ((dataPoint.attributes[i].minus(minValues[i])) / binSizes[i]);
                 // ensure the index is in the correct range
                 if(currentIndex < 0) {
                     currentIndex = 0;

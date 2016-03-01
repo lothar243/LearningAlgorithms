@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * A class to store all the information regarding the data
@@ -76,11 +77,11 @@ public class Data {
         // first loop through all of the data to find the min and max values of each attribute
         for (DataPoint dataPoint : dataPoints) {
             for (int i = 0; i < attributeNames.length - 1; i++) {
-                if (minValues[i] > dataPoint.attributes[i]) {
-                    minValues[i] = dataPoint.attributes[i];
+                if (dataPoint.attributes[i].isLessThan(minValues[i])) {
+                    minValues[i] = (Double)dataPoint.attributes[i].getValue();
                 }
-                if (maxValues[i] < dataPoint.attributes[i]) {
-                    maxValues[i] = dataPoint.attributes[i];
+                if (dataPoint.attributes[i].isGreaterThan(maxValues[i])) {
+                    maxValues[i] = (Double)dataPoint.attributes[i].getValue();
                 }
             }
         }
@@ -102,7 +103,8 @@ public class Data {
             for(int i = 0; i < attributeNames.length - 1; i++) {
                 if(minValues[i] != maxValues[i]) {
                     // ensure min and max are not equal to avoid a division by zero error
-                    dataPoint.attributes[i] = normalizeDataPoint(dataPoint.attributes[i], minValues[i], maxValues[i]);
+                    dataPoint.attributes[i].setValue(normalizeDataPoint((Double)dataPoint.attributes[i].getValue(),
+                            minValues[i], maxValues[i]));
                 }
             }
         }
@@ -115,7 +117,7 @@ public class Data {
      * @param maxValue The right endpoint of the interval
      * @return The new value in the interval [0, 1]
      */
-    public static double normalizeDataPoint(double originalValue, double minValue, double maxValue) {
+    public static Double normalizeDataPoint(Double originalValue, Double minValue, Double maxValue) {
         return (originalValue - minValue) / (maxValue - minValue);
     }
 
@@ -125,10 +127,13 @@ public class Data {
 
 class DataPoint {
     int classificationIndex;
-    public final double[] attributes;
+    public final AttributeValue[] attributes;
 
-    public DataPoint(double[] attributes) {
-        this.attributes = attributes;
+    public DataPoint(Double[] DoubleAttributes) {
+        this.attributes = new AttributeValue[DoubleAttributes.length];
+        for (int i = 0; i < attributes.length; i++) {
+            attributes[i] = new AttributeValue(DoubleAttributes[i]);
+        }
         this.classificationIndex = -1;
     }
 
@@ -140,15 +145,15 @@ class DataPoint {
         return output;
     }
 
-    public static double distanceSquared(DataPoint first, DataPoint second) {
-        double distanceSquared = 0;
+    public static Double distanceSquared(DataPoint first, DataPoint second) {
+        Double distanceSquared = 0d;
         for (int i = 0; i < first.attributes.length; i++) {
-            distanceSquared += Math.pow(first.attributes[i] - second.attributes[i], 2);
+            distanceSquared += Math.pow(first.attributes[i].minus(second.attributes[i]), 2);
         }
         return distanceSquared;
     }
 
-    public static double distance(DataPoint first, DataPoint second) {
+    public static Double distance(DataPoint first, DataPoint second) {
         return Math.sqrt(distanceSquared(first, second));
     }
 
@@ -168,21 +173,53 @@ class DataPoint {
         }
 
         public Double plus(AttributeValue other) {
-            Object otherValue = other.getValue();
-            if(value.getClass().equals(Double.class) && otherValue.getClass().equals(Double.class)) {
-                return (Double)value + (Double)otherValue;
+            if (this.isDouble() && other.isDouble()) {
+                return (Double) value + (Double) other.getValue();
             }
-            return -1d;
+            return null;
+        }
+
+        public boolean isLessThan(Double other) {
+            return this.isDouble() && (Double) value < other;
+        }
+        public boolean isGreaterThan(Double other) {
+            return this.isDouble() && (Double) value > other;
+        }
+
+        public boolean isDouble() {
+            return value.getClass().equals(Double.class);
+        }
+        public String toString() {
+            return "" + value;
         }
 
         @Override
         public boolean equals(Object otherObject) {
-            if(!otherObject.getClass().equals(AttributeValue.class)) {
+            if (!otherObject.getClass().equals(AttributeValue.class)) {
                 return false;
             }
             // now it's safe to cast
-            AttributeValue other = (AttributeValue)otherObject;
+            AttributeValue other = (AttributeValue) otherObject;
             return value.equals(other.getValue());
+        }
+
+        public Double minus(AttributeValue other) {
+            if(this.isDouble() && other.isDouble()) {
+                return (Double)value - (Double)other.getValue();
+            }
+            return null;
+        }
+        public Double minus(Double other) {
+            if(this.isDouble()) {
+                return (Double)value - other;
+            }
+            return null
+                    ;
+        }
+
+        public Double getDouble() {
+            if(this.isDouble()) return (Double)value;
+            return null;
         }
     }
 }

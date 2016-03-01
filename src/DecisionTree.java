@@ -236,7 +236,7 @@ public class DecisionTree {
             childNodes = new ArrayList<>();
             splitAttributeValue = new ArrayList<>();
             for(ArrayList<DataPoint> childDataPoints: bestDataSplit) {
-                splitAttributeValue.add(childDataPoints.get(0).attributes[splitAttribute]);
+                splitAttributeValue.add(childDataPoints.get(0).attributes[splitAttribute].getDouble());
 
                 Node childNode = new Node(childDataPoints, classValues);
                 childNode.generateChildNodes(childDataPoints, bestChildRemainingAttributes, sufficientEntropy);
@@ -251,10 +251,10 @@ public class DecisionTree {
             ArrayList<ArrayList<DataPoint>> dataPointsAfterSplit = new ArrayList<>();
             // survey the current dataPoints and separate them based on the value of the given attribute
             for(DataPoint dataPoint: dataPoints) {
-                int indexOfValue = splitAttributeValue.indexOf(dataPoint.attributes[splitAttribute]);
+                int indexOfValue = splitAttributeValue.indexOf(dataPoint.attributes[splitAttribute].getDouble());
                 if(indexOfValue == -1) {
                     // the value hasn't been seen yet
-                    splitAttributeValue.add(dataPoint.attributes[splitAttribute]);
+                    splitAttributeValue.add(dataPoint.attributes[splitAttribute].getDouble());
                     indexOfValue = splitAttributeValue.size() - 1;
                     dataPointsAfterSplit.add(new ArrayList<DataPoint>());
                 }
@@ -362,7 +362,7 @@ public class DecisionTree {
 
         public int predictClassIndex(DataPoint dataPoint) {
             if(childNodes == null) return voteByCount(); // there are no further child nodes, take a popular vote
-            int childNodeIndex = splitAttributeValue.indexOf(dataPoint.attributes[splitAttribute]);
+            int childNodeIndex = splitAttributeValue.indexOf(dataPoint.attributes[splitAttribute].getDouble());
             if(childNodeIndex == -1) return voteByCount(); // this value wasn't seen in the training data, take a popular vote
             return childNodes.get(childNodeIndex).predictClassIndex(dataPoint);
         }
