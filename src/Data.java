@@ -151,4 +151,38 @@ class DataPoint {
     public static double distance(DataPoint first, DataPoint second) {
         return Math.sqrt(distanceSquared(first, second));
     }
+
+    class AttributeValue {
+        Object value;
+
+        public AttributeValue(Object value) {
+            this.value = value;
+        }
+
+        public Object getValue() {
+            return value;
+        }
+
+        public void setValue(Object value) {
+            this.value = value;
+        }
+
+        public Double plus(AttributeValue other) {
+            Object otherValue = other.getValue();
+            if(value.getClass().equals(Double.class) && otherValue.getClass().equals(Double.class)) {
+                return (Double)value + (Double)otherValue;
+            }
+            return -1d;
+        }
+
+        @Override
+        public boolean equals(Object otherObject) {
+            if(!otherObject.getClass().equals(AttributeValue.class)) {
+                return false;
+            }
+            // now it's safe to cast
+            AttributeValue other = (AttributeValue)otherObject;
+            return value.equals(other.getValue());
+        }
+    }
 }
