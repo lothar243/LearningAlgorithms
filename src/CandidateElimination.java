@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 public class CandidateElimination {
 
@@ -82,10 +83,18 @@ class Expression {
     final AttributeValue[] values;
     final boolean nullExpression;
 
+    /**
+     * Constructor for most expressions
+     * @param values Values required for a point to be classified as a positive example
+     */
     public Expression(AttributeValue[] values) {
         this.values = values;
         nullExpression = false;
     }
+
+    /**
+     * Constructor for a null expression
+     */
     public Expression() {
         values = null;
         nullExpression = true;
@@ -147,16 +156,32 @@ class Expression {
     }
 
     public Expression copyWithWildcardAtPosition(int position) {
-        if(nullExpression || this.values == null) {
+        Expression modifiedCopy = this.copyOf();
+        if(modifiedCopy.nullExpression || modifiedCopy.values == null) {
             System.out.println("Error, can't give a wildcard in positions to a null expression");
             System.exit(2);
         }
+        modifiedCopy.values[position].setToWildcard();
+        return modifiedCopy;
+    }
+    public Expression copyWithValueAtPosition(int position, AttributeValue value) {
+        Expression modifiedCopy = this.copyOf();
+        if(modifiedCopy.nullExpression || modifiedCopy.values == null) {
+            System.out.println("Error, can't specialize a null expression");
+            System.exit(5);
+        }
+        modifiedCopy.values[position] = new AttributeValue(value.getValue());
+        return modifiedCopy;
+    }
+    public Expression copyOf() {
+        // performing a deep copy
+        if(this.values == null || this.nullExpression) {
+            return new Expression();
+        }
         AttributeValue[] attributeValues = new AttributeValue[this.values.length];
         for (int i = 0; i < attributeValues.length; i++) {
-            // performing a deep copy
             attributeValues[i] = new AttributeValue(this.values[i].getDouble());
         }
-        attributeValues[position].setToWildcard();
         return new Expression(attributeValues);
     }
 
@@ -175,6 +200,7 @@ class Expression {
             return trivialList;
         }
         ArrayList<Expression> output = new ArrayList<>();
+        // if the specialized boundary is currently the null expression, set it to accept only return true for the current point
         if(this.nullExpression || this.values == null) {
             output.add(new Expression(point.attributes));
             return output;
@@ -194,6 +220,32 @@ class Expression {
         }
         // so far, this is just a bunch of generalizations. To make it minimal, we remove any that are too general
         Expression.removeMoreGeneralExpressions(output);
+        return output;
+    }
+
+    private ArrayList<Expression> minimalSpecializations(DataPoint point,
+                                                          ArrayList<ArrayList<AttributeValue>> possibleValues) {
+        // we begin by ensuring that our inputs are as expected... a negative example that does not satisfy the current
+        // expression and is not the null expression
+        if(point.classificationIndex == 1) return null;
+        if(this.isSatisfiedBy(point)) {
+            ArrayList<Expression> trivialList = new ArrayList<>();
+            trivialList.add(this);
+            return trivialList;
+        }
+        ArrayList<Expression> output = new ArrayList<>();
+        if(this.nullExpression || this.values == null) {
+            System.out.println("Error, a null expression didn't satisfy a negative example");
+            System.exit(4);
+        }
+
+        // for each attribute that is currently a wildcard, create expressions for each of the possible values of that attribute
+        // if a resulting expression is still not satisfied by the point, recurse
+        for(int i = 0; i < point.attributes.length; i++) {
+            if(this.values[i].isWildcard()) {
+
+            }
+        }
         return output;
     }
 
@@ -243,18 +295,46 @@ class Expression {
     /**
      * Find expressions for which the point is inconsistent, remove them from the boundary and add in all minimal
      * generalizations such that the new expressions are satisfied by the point
-     * @param boundary The S boundary
+     * @param specializedBoundary The S boundary
      * @param point A positive example (It has a class of 1)
      */
-    public static void minimallyGeneralize(ArrayList<Expression> boundary, DataPoint point,
+    public static void minimallyGeneralize(ArrayList<Expression> specializedBoundary, DataPoint point,
                                            ArrayList<ArrayList<AttributeValue>> possibleValues) {
-        for(int i = boundary.size(); i >= 0; i--) {
-            if(!boundary.get(i).isSatisfiedBy(point)) {
-                Expression removedExpression = boundary.get(i);
-                boundary.remove(i);
-                boundary.addAll(removedExpression.minimalGeneralizations(point));
+        if(point.classificationIndex == 0) {
+            System.out.println("Error, negative examples should not generalize the S boundary");
+            return;
+        }
+        for(int i = specializedBoundary.size(); i >= 0; i--) {
+            Expression currentExpression = specializedBoundary.get(i);
+            if(!currentExpression.isSatisfiedBy(point)) {
+                specializedBoundary.remove(i);
+                specializedBoundary.addAll(currentExpression.minimalGeneralizations(point));
             }
         }
+        Expression.removeMoreGeneralExpressions(specializedBoundary);
+    }
+
+    /**
+     * Find expressions for which a negative example is inconsistent, the remove them and minimally specialize the
+     * boundary so that the negative example is correctly classified
+     * @param generalizedBoundary The G boundary
+     * @param point A negative example (Class of 0)
+     * @param possibleValues All possible values of each of the attributes - needed to generate specializations
+     */
+    public static void minimallySpecialize(ArrayList<Expression> generalizedBoundary, DataPoint point,
+                                           ArrayList<ArrayList<AttributeValue>> possibleValues) {
+        if(point.classificationIndex == 1) {
+            System.out.println("Error, positive examples should not be used to specialize the G boundary");
+            return;
+        }
+        for(int i = generalizedBoundary.size() - 1; i >= 0; i--) {
+            Expression currentExpression = generalizedBoundary.get(i);
+            if(!currentExpression.isSatisfiedBy(point)) {
+                generalizedBoundary.remove(i);
+                generalizedBoundary.addAll(currentExpression.minimalSpecializations(point, possibleValues));
+            }
+        }
+        // todo Expression.removeMoreSpecializedExpressions(generalizedBoundary);
     }
 
 

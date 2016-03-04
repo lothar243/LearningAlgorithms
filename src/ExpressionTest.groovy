@@ -64,6 +64,14 @@ class ExpressionTest extends GroovyTestCase {
         Expression test = secondExpression.copyWithWildcardAtPosition(0).copyWithWildcardAtPosition(1).copyWithWildcardAtPosition(2);
         assertTrue(test.equals(thirdExpression));
     }
+    void testCopyWithValue() {
+        Expression copyOfSecond = secondExpression.copyWithValueAtPosition(3, new AttributeValue(4d));
+        System.out.println(copyOfSecond.toString());
+        assertTrue(firstExpression.equals(copyOfSecond));
+
+        Expression copyOfFourth = fourthExpression.copyWithValueAtPosition(0, new AttributeValue(1d));
+        assertTrue(firstExpression.equals(copyOfFourth));
+    }
 
     void testMinimalGeneralizations() {
         ArrayList<Expression> generalizations = firstExpression.minimalGeneralizations(thirdTestPoint);
