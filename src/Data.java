@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 
 /**
  * A class to store all the information regarding the data
@@ -129,12 +128,13 @@ class DataPoint {
     int classificationIndex;
     public final AttributeValue[] attributes;
 
-    public DataPoint(Double[] DoubleAttributes) {
-        this.attributes = new AttributeValue[DoubleAttributes.length];
-        for (int i = 0; i < attributes.length; i++) {
-            attributes[i] = new AttributeValue(DoubleAttributes[i]);
-        }
+    public DataPoint(Double[] doubleAttributes) {
+        this.attributes = AttributeValue.createArray(doubleAttributes);
         this.classificationIndex = -1;
+    }
+    public DataPoint(Double[] doubleAttributes, int classificationIndex) {
+        this.attributes = AttributeValue.createArray(doubleAttributes);
+        this.classificationIndex = classificationIndex;
     }
 
     public String toString() {
@@ -157,69 +157,4 @@ class DataPoint {
         return Math.sqrt(distanceSquared(first, second));
     }
 
-    class AttributeValue {
-        Object value;
-
-        public AttributeValue(Object value) {
-            this.value = value;
-        }
-
-        public Object getValue() {
-            return value;
-        }
-
-        public void setValue(Object value) {
-            this.value = value;
-        }
-
-        public Double plus(AttributeValue other) {
-            if (this.isDouble() && other.isDouble()) {
-                return (Double) value + (Double) other.getValue();
-            }
-            return null;
-        }
-
-        public boolean isLessThan(Double other) {
-            return this.isDouble() && (Double) value < other;
-        }
-        public boolean isGreaterThan(Double other) {
-            return this.isDouble() && (Double) value > other;
-        }
-
-        public boolean isDouble() {
-            return value.getClass().equals(Double.class);
-        }
-        public String toString() {
-            return "" + value;
-        }
-
-        @Override
-        public boolean equals(Object otherObject) {
-            if (!otherObject.getClass().equals(AttributeValue.class)) {
-                return false;
-            }
-            // now it's safe to cast
-            AttributeValue other = (AttributeValue) otherObject;
-            return value.equals(other.getValue());
-        }
-
-        public Double minus(AttributeValue other) {
-            if(this.isDouble() && other.isDouble()) {
-                return (Double)value - (Double)other.getValue();
-            }
-            return null;
-        }
-        public Double minus(Double other) {
-            if(this.isDouble()) {
-                return (Double)value - other;
-            }
-            return null
-                    ;
-        }
-
-        public Double getDouble() {
-            if(this.isDouble()) return (Double)value;
-            return null;
-        }
-    }
 }
