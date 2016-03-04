@@ -66,7 +66,6 @@ class ExpressionTest extends GroovyTestCase {
     }
     void testCopyWithValue() {
         Expression copyOfSecond = secondExpression.copyWithValueAtPosition(3, new AttributeValue(4d));
-        System.out.println(copyOfSecond.toString());
         assertTrue(firstExpression.equals(copyOfSecond));
 
         Expression copyOfFourth = fourthExpression.copyWithValueAtPosition(0, new AttributeValue(1d));
@@ -82,6 +81,44 @@ class ExpressionTest extends GroovyTestCase {
         Expression.removeMoreGeneralExpressions(generalizations);
         assertEquals(1, generalizations.size());
         assertTrue(generalizations.get(0).equals(secondExpression));
+
+    }
+    void testMinimalSpecifications() {
+        ArrayList<ArrayList<AttributeValue>> possibleValues = new ArrayList<>();
+        possibleValues.add(new ArrayList<AttributeValue>());
+        possibleValues.get(0).add(new AttributeValue(1d));
+        possibleValues.get(0).add(new AttributeValue(2d));
+
+        possibleValues.add(new ArrayList<AttributeValue>());
+        possibleValues.get(1).add(new AttributeValue(1d));
+        possibleValues.get(1).add(new AttributeValue(2d));
+
+        possibleValues.add(new ArrayList<AttributeValue>());
+        possibleValues.get(2).add(new AttributeValue(3d));
+        possibleValues.get(2).add(new AttributeValue(4d));
+
+        possibleValues.add(new ArrayList<AttributeValue>());
+        possibleValues.get(3).add(new AttributeValue(3d));
+        possibleValues.get(3).add(new AttributeValue(4d));
+
+        ArrayList<Expression> specifications = secondExpression.minimalSpecifications(fourthTestPoint, possibleValues);
+        // starts out as (1,2,3,*). After the minimal specification, it should just be (1,2,3,4)
+        assertEquals(1, specifications.size());
+        assertTrue(specifications.get(0).equals(firstExpression));
+
+        specifications = thirdExpression.minimalSpecifications(secondTestPoint, possibleValues);
+        Expression[] expectedExpressions = new Expression[4];
+        expectedExpressions[0] = createExpression(2, null, null, null);
+        expectedExpressions[1] = createExpression(null, 1, null, null);
+        expectedExpressions[2] = createExpression(null, null, 4, null);
+        expectedExpressions[3] = createExpression(null, null, null, 3);
+        assertEquals(4, specifications.size());
+        for (int i = 0; i < 4; i++) {
+            assertTrue(specifications.get(i).equals(expectedExpressions[i]));
+        }
+
+
+
 
     }
 
