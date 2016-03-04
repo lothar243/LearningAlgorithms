@@ -167,18 +167,33 @@ class Expression {
     }
 
     public ArrayList<Expression> minimalGeneralizations(DataPoint point) {
+        if(point.classificationIndex == 0) return null; // this should only be used with positive examples
+        if(this.isSatisfiedBy(point)) {
+            // no generalization is necessary, the point already satisfies the expression
+            ArrayList<Expression> trivialList = new ArrayList<>();
+            trivialList.add(this);
+            return trivialList;
+        }
         ArrayList<Expression> output = new ArrayList<>();
         if(this.nullExpression || this.values == null) {
             output.add(new Expression(point.attributes));
             return output;
         }
-        // now look through each of the values that is not a wildcard, and add a new expression that makes it a wildcard
-        // if the point still doesn't satisfy the more generalized expression, recurse
+        // try adding a wildcard to one position that doesn't have one
+        // if the resulting expression still isn't satisfied by the point, recurse
         for (int i = 0; i < point.attributes.length; i++) {
             if(this.values[i].isNotWildcard()) {
-                //todo finish
+                Expression newExpression = this.copyWithWildcardAtPosition(i);
+                if(!newExpression.isSatisfiedBy(point)) {
+                    output.addAll(newExpression.minimalGeneralizations(point));
+                }
+                else {
+                    output.add(newExpression);
+                }
             }
         }
+        // so far, this is just a bunch of generalizations. To make it minimal, we remove any that are too general
+        Expression.removeMoreGeneralExpressions(output);
         return output;
     }
 
@@ -210,6 +225,17 @@ class Expression {
         for (int i = boundary.size() - 1; i >= 0; i--) {
             if(!boundary.get(i).isSatisfiedBy(point)) {
                 boundary.remove(i);
+            }
+        }
+    }
+    public static void removeMoreGeneralExpressions(ArrayList<Expression> specificBoundary) {
+        // used to remove unwanted expressions from the specific boundary (anything that is more general)
+        for (int i = specificBoundary.size() - 1; i >= 0; i--) {
+            for(Expression expression: specificBoundary) {
+                if(specificBoundary.get(i).isMoreGeneralThan(expression)) {
+                    specificBoundary.remove(i);
+                    break;
+                }
             }
         }
     }
