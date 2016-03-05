@@ -51,10 +51,50 @@ public class CandidateElimination {
         FileIO.readFromFile(trainingDataFile, trainingData);
         final int numAttributes = trainingData.numAttributes;
 
+        ArrayList<ArrayList<AttributeValue>> possibleValues = trainingData.inferPossibleAttributeValues();
+        System.out.println("possibleValues" + possibleValues);
 
         ArrayList<Expression> generalBoundary = Expression.initialGeneralBoundary(numAttributes);
         ArrayList<Expression> specificBoundary = Expression.initialSpecificBoundary();
 
+        int positiveExampleIndex = 0;
+        if(!trainingData.classifications.get(0).equalsIgnoreCase("1")) {
+            positiveExampleIndex = 1;
+        }
+
+
+        System.out.println("Starting expressions:");
+        System.out.println("General boundary:" + generalBoundary);
+        System.out.println("Specific boundary: " + specificBoundary);
+
+        for(DataPoint point: trainingData.dataPoints) {
+            System.out.println("Point: " + point);
+            if(point.classificationIndex == positiveExampleIndex) { // positive example
+                System.out.println("Positive example");
+                Expression.removeInconsistentExpressions(generalBoundary, point);
+                System.out.println("RemoveInconsistentExpressions (general): " + generalBoundary);
+                Expression.minimallyGeneralize(specificBoundary, point);
+                System.out.println("minimallyGeneralize (specific): " + specificBoundary);
+                Expression.removeMoreGeneralExpressions(specificBoundary);
+                System.out.println("removeMoreGeneralized (specific): " + specificBoundary);
+            }
+            else { // negative example
+                System.out.println("Negative example");
+                Expression.removeInconsistentExpressions(specificBoundary, point);
+                System.out.println("RemoveInconsistentExpressions (specific): " + specificBoundary);
+                Expression.minimallySpecify(generalBoundary, point, possibleValues);
+                System.out.println("minimallySpecify (general): " + generalBoundary);
+                Expression.removeMoreSpecificExpressions(generalBoundary);
+                System.out.println("removeMoreSpecific (general): " + generalBoundary);
+            }
+            System.out.println("General boundary:" + generalBoundary);
+            System.out.println("Specific boundary: " + specificBoundary);
+
+        }
+
+        System.out.println("Generated conditions");
+        System.out.println("General boundary:" + generalBoundary);
+        System.out.println("Specific boundary: " + specificBoundary);
     }
 
     public static void printHelpString() {
@@ -73,8 +113,6 @@ public class CandidateElimination {
 
     }
 }
-
-
 
 
 class Expression {
@@ -100,7 +138,8 @@ class Expression {
     }
 
     public boolean isMoreGeneralThan(Expression other) {
-        if(nullExpression) return false;
+        if(nullExpression || this.values == null) return false;
+        if(other.values == null) return true;
         boolean moreBlanks = false;
         if(this.values.length != other.values.length) {
             return false;
@@ -147,10 +186,11 @@ class Expression {
     public static ArrayList<Expression> initialGeneralBoundary(int numAttributes) {
         AttributeValue[] attributeValues = new AttributeValue[numAttributes];
         for (int i = 0; i < numAttributes; i++) {
-            attributeValues = null;
+            attributeValues[i] = new AttributeValue(null);
         }
         ArrayList<Expression> output = new ArrayList<>();
-        output.add(new Expression(attributeValues));
+        Expression initialExpression = new Expression(attributeValues) ;
+        output.add(initialExpression);
         return output;
     }
 
@@ -291,21 +331,29 @@ class Expression {
         // used to remove unwanted expressions from the specific boundary (anything that is more general)
         for (int i = specificBoundary.size() - 1; i >= 0; i--) {
             Expression currentExpression = specificBoundary.get(i);
-            for(Expression otherExpression: specificBoundary) {
-                if(currentExpression.isMoreGeneralThan(otherExpression)) {
-                    specificBoundary.remove(i); //remove the current expression from the list and move on to the next
-                    break;
+            for (int j = 0; j < specificBoundary.size(); j++) {
+                if(i != j) {
+                    Expression otherExpression = specificBoundary.get(j);
+                    if (currentExpression.isMoreGeneralThan(otherExpression) || currentExpression.equals(otherExpression)) {
+                        specificBoundary.remove(i); //remove the current expression from the list and move on to the next
+                        break;
+                    }
                 }
+            }
+            for(Expression otherExpression: specificBoundary) {
             }
         }
     }
     public static void removeMoreSpecificExpressions(ArrayList<Expression> generalBoundary) {
         for(int i = generalBoundary.size() - 1; i >= 0; i--) {
             Expression currentExpression = generalBoundary.get(i);
-            for(Expression otherExpression: generalBoundary) {
-                if(currentExpression.isMoreSpecificThan(otherExpression)) {
-                    generalBoundary.remove(i);
-                    break;
+            for (int j = 0; j < generalBoundary.size(); j++) {
+                if(i != j) {
+                    Expression otherExpression = generalBoundary.get(j);
+                    if(currentExpression.isMoreSpecificThan(otherExpression) || currentExpression.equals(otherExpression)) {
+                        generalBoundary.remove(i);
+                        break;
+                    }
                 }
             }
         }
@@ -317,20 +365,18 @@ class Expression {
      * @param specificBoundary The S boundary
      * @param point A positive example (It has a class of 1)
      */
-    public static void minimallyGeneralize(ArrayList<Expression> specificBoundary, DataPoint point,
-                                           ArrayList<ArrayList<AttributeValue>> possibleValues) {
+    public static void minimallyGeneralize(ArrayList<Expression> specificBoundary, DataPoint point) {
         if(point.classificationIndex == 0) {
             System.out.println("Error, negative examples should not generalize the S boundary");
             return;
         }
-        for(int i = specificBoundary.size(); i >= 0; i--) {
+        for(int i = specificBoundary.size() - 1; i >= 0; i--) {
             Expression currentExpression = specificBoundary.get(i);
             if(!currentExpression.isSatisfiedBy(point)) {
                 specificBoundary.remove(i);
                 specificBoundary.addAll(currentExpression.minimalGeneralizations(point));
             }
         }
-        Expression.removeMoreGeneralExpressions(specificBoundary);
     }
 
     /**

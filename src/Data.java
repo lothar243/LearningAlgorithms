@@ -64,6 +64,21 @@ public class Data {
         return output;
     }
 
+    public ArrayList<ArrayList<AttributeValue>> inferPossibleAttributeValues() {
+        ArrayList<ArrayList<AttributeValue>> possibleValues = new ArrayList<>();
+        for (int i = 0; i < numAttributes; i++) {
+            ArrayList<AttributeValue> currentAttributeValues = new ArrayList<>();
+            for(DataPoint point: dataPoints) {
+                AttributeValue currentValue = point.attributes[i];
+                if(!currentAttributeValues.contains(currentValue)) {
+                    currentAttributeValues.add(currentValue);
+                }
+            }
+            possibleValues.add(currentAttributeValues);
+        }
+        return possibleValues;
+    }
+
     /**
      * Compute and store the min and max value of the data for each attribute
      */

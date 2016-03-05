@@ -22,6 +22,12 @@ class ExpressionTest extends GroovyTestCase {
         assertFalse(createExpression(1,2,3,4).isMoreGeneralThan(createExpression(1,2,3,null)));
         assertFalse(createExpression(1,2,3,null).isMoreGeneralThan(createExpression(1,2,3,null)))
     }
+    void testIsMoreSpecificThan() {
+        assertFalse(createExpression(1,2,3,null).isMoreSpecificThan(createExpression(1,2,3,4)));
+        assertFalse(createExpression(1,2,3,4).isMoreSpecificThan(createExpression(1,2,3,4)));
+        assertTrue(createExpression(1,2,3,4).isMoreSpecificThan(createExpression(1,2,3,null)));
+        assertFalse(createExpression(1,2,3,null).isMoreSpecificThan(createExpression(1,2,3,null)))
+    }
 
     void testIsSatisfiedBy() {
 
@@ -83,6 +89,26 @@ class ExpressionTest extends GroovyTestCase {
         assertTrue(generalizations.get(0).equals(secondExpression));
 
     }
+    void testRemoveMoreGeneralExpressions() {
+        ArrayList<Expression> testBoundary = new ArrayList<>();
+        testBoundary.add(firstExpression);
+        testBoundary.add(firstExpression);
+        testBoundary.add(secondExpression);
+        testBoundary.add(secondExpression);
+        Expression.removeMoreGeneralExpressions(testBoundary);
+        assertEquals(1, testBoundary.size());
+        assertTrue(testBoundary.get(0).equals(firstExpression));
+    }
+    void testRemoveMoreSpecificExpressions() {
+        ArrayList<Expression> testBoundary = new ArrayList<>();
+        testBoundary.add(firstExpression);
+        testBoundary.add(firstExpression);
+        testBoundary.add(secondExpression);
+        testBoundary.add(secondExpression);
+        Expression.removeMoreSpecificExpressions(testBoundary);
+        assertEquals(1, testBoundary.size());
+        assertTrue(testBoundary.get(0).equals(secondExpression));
+    }
     void testMinimalSpecifications() {
         ArrayList<ArrayList<AttributeValue>> possibleValues = new ArrayList<>();
         possibleValues.add(new ArrayList<AttributeValue>());
@@ -117,9 +143,20 @@ class ExpressionTest extends GroovyTestCase {
             assertTrue(specifications.get(i).equals(expectedExpressions[i]));
         }
 
+        specifications = Expression.initialGeneralBoundary(4);
+        Expression.minimallySpecify(specifications, secondTestPoint, possibleValues);
+        assertEquals(4, specifications.size());
 
 
-
+    }
+    public void testInitialGeneralBoundary() {
+        ArrayList<Expression> generalBoundary = Expression.initialGeneralBoundary(4);
+        assertEquals(1, generalBoundary.size());
+        Expression initialExpression = generalBoundary.get(0);
+        System.out.println("Initial expression from boundary: " + initialExpression);
+        for (int i = 0; i < 4; i++) {
+            assertTrue(initialExpression.values[i].isWildcard());
+        }
     }
 
     public static Expression createExpression(Double a, Double b, Double c, Double d) {

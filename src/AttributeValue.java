@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * A generic type with some necessary methods
  */
@@ -92,4 +94,6 @@ class AttributeValue {
     public void setToWildcard() {
         value = null;
     }
+
+
 }
