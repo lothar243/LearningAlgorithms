@@ -107,47 +107,6 @@ public class DecisionTree {
     }
 
     /**
-     * Calculate entropy of a set of points
-     * @param dataPoints the datapoints in the current set
-     * @return the entropy of a given set of dataPoints
-     */
-    public static double entropyOf(ArrayList<DataPoint> dataPoints, int numClasses) {
-        Integer[] classCounts = tallyClasses(dataPoints, numClasses);
-        return entropyOf(classCounts);
-    }
-    public static double entropyOf(Integer[] numPointsPerClass) {
-        double entropy = 0;
-        // determine the total number of points to use for probabilities
-        int totalPoints = 0;
-        for(int numPoints: numPointsPerClass) {
-            totalPoints += numPoints;
-        }
-        if(totalPoints == 0) {
-            // no points to judge from means highest entropyOf
-            return 1;
-        }
-        int numClasses = numPointsPerClass.length;
-        for(int numInClass: numPointsPerClass) {
-            double probabilityOfClass = (double)numInClass / totalPoints;
-            // entropyOf is the opposite of the sum of the probabilities * the log of the probabilities
-            if(probabilityOfClass != 0)
-                entropy += - probabilityOfClass * Math.log(probabilityOfClass);
-        }
-        if(numClasses == 1) {
-            // if there's only one class, the data is already homogeneous
-            return 0;
-        }
-        return entropy / Math.log(numClasses); // dividing by this log converts the base of all the above logs
-    }
-
-    public static double informationGain(double startingEntropy, ArrayList<ArrayList<DataPoint>> listsAfterSplit, int numClasses) {
-        return startingEntropy - Node.weightedAverageOfEntropies(listsAfterSplit, numClasses);
-    }
-    public static double informationGain(Node node) {
-        return node.entropy - Node.weightedAverageOfChildNodes(node.childNodes);
-    }
-
-    /**
      * Tally the number of points in each of the classes for a given set
      * @param dataPoints the set of points to look through
      * @return an integer array of the number of dataPoints in each of the classes
@@ -206,6 +165,48 @@ public class DecisionTree {
         }
 
         /**
+         * Calculate entropy of a set of points
+         * @param dataPoints the datapoints in the current set
+         * @return the entropy of a given set of dataPoints
+         */
+        public static double entropyOf(ArrayList<DataPoint> dataPoints, int numClasses) {
+            Integer[] classCounts = tallyClasses(dataPoints, numClasses);
+            return entropyOf(classCounts);
+        }
+        public static double entropyOf(Integer[] numPointsPerClass) {
+            double entropy = 0;
+            // determine the total number of points to use for probabilities
+            int totalPoints = 0;
+            for(int numPoints: numPointsPerClass) {
+                totalPoints += numPoints;
+            }
+            if(totalPoints == 0) {
+                // no points to judge from means highest entropyOf
+                return 1;
+            }
+            int numClasses = numPointsPerClass.length;
+            for(int numInClass: numPointsPerClass) {
+                double probabilityOfClass = (double)numInClass / totalPoints;
+                // entropyOf is the opposite of the sum of the probabilities * the log of the probabilities
+                if(probabilityOfClass != 0)
+                    entropy += - probabilityOfClass * Math.log(probabilityOfClass);
+            }
+            if(numClasses == 1) {
+                // if there's only one class, the data is already homogeneous
+                return 0;
+            }
+            return entropy / Math.log(numClasses); // dividing by this log converts the base of all the above logs
+        }
+
+        public static double informationGain(double startingEntropy, ArrayList<ArrayList<DataPoint>> listsAfterSplit, int numClasses) {
+            return startingEntropy - weightedAverageOfEntropies(listsAfterSplit, numClasses);
+        }
+
+        public static double informationGain(Node node) {
+            return node.entropy - weightedAverageOfChildNodes(node.childNodes);
+        }
+
+        /**
          * Looks through all of the remaining attributes and chooses the one that results in the lowest weighted
          * average of entropies of it's child nodes - this is equivalent to the largest information gain
          * @param dataPoints The datapoints of the current node
@@ -219,11 +220,15 @@ public class DecisionTree {
             ArrayList<Integer> bestChildRemainingAttributes = new ArrayList<>();
             ArrayList<ArrayList<DataPoint>> bestDataSplit = new ArrayList<>();
             for (int i = 0; i < remainingAttributes.size(); i++) {
+                // first create a copy of the arrayList, then remove the attribute we're about to split on from it
                 ArrayList<Integer> childRemainingAttributes = MyTools.copyOf(remainingAttributes);
                 int splitAttribute = childRemainingAttributes.get(i);
                 childRemainingAttributes.remove(i);
+
+                // now actually perform the split of data points based on their value in this particular attribute
                 ArrayList<ArrayList<DataPoint>> dataPointsAfterSplit = splitOnAttribute(dataPoints, splitAttribute);
                 double childEntropy = weightedAverageOfEntropies(dataPointsAfterSplit, classValues.length);
+                // if this split results in a better entropy, remember it
                 if(childEntropy < lowestEntropy) {
                     lowestEntropy = childEntropy;
                     bestAttribute = splitAttribute;
@@ -235,16 +240,17 @@ public class DecisionTree {
             splitAttribute = bestAttribute;
             childNodes = new ArrayList<>();
             splitAttributeValue = new ArrayList<>();
+
             for(ArrayList<DataPoint> childDataPoints: bestDataSplit) {
+                // remember the attribute value for each of the groups of data
                 splitAttributeValue.add(childDataPoints.get(0).attributes[splitAttribute].getDouble());
 
+                // continue splitting up the data in the resulting nodes
                 Node childNode = new Node(childDataPoints, classValues);
                 childNode.generateChildNodes(childDataPoints, bestChildRemainingAttributes, sufficientEntropy);
                 childNodes.add(childNode);
             }
         }
-
-
 
         public static ArrayList<ArrayList<DataPoint>> splitOnAttribute(ArrayList<DataPoint> dataPoints, int splitAttribute) {
             ArrayList<Double> splitAttributeValue = new ArrayList<>();
@@ -277,6 +283,10 @@ public class DecisionTree {
             return output;
         }
 
+        /**
+         * Generate a one line string that gives data about the current node
+         * @return the summary
+         */
         public String toStringSummary() {
             String output = "";
             for (int i = 0; i < numPointsPerClass.length; i++) {
@@ -285,6 +295,7 @@ public class DecisionTree {
             output += "Entropy: " + MyTools.roundTo(entropy, 4);
             return output;
         }
+        // this is overloaded, so I can optionally specify the class names to make it more human readable
         public String toStringSummary(ArrayList<String> classNames) {
             String output = "";
             for (int i = 0; i < numPointsPerClass.length; i++) {
@@ -294,6 +305,10 @@ public class DecisionTree {
             return output;
         }
 
+        /**
+         * Count the number of points that created this node
+         * @return the number of points
+         */
         public int totalClassifiedPoints() {
             if(numPointsPerClass == null) return 0;
             int totalPoints = 0;
@@ -303,6 +318,12 @@ public class DecisionTree {
             return totalPoints;
         }
 
+        /**
+         *
+         * @param listOfLists
+         * @param numClasses
+         * @return
+         */
         public static double weightedAverageOfEntropies(ArrayList<ArrayList<DataPoint>> listOfLists, int numClasses) {
             if(listOfLists == null) return 1;
             double totalEntropy = 0;
@@ -360,6 +381,11 @@ public class DecisionTree {
             return output;
         }
 
+        /**
+         * Predict the class of test data after the tree has been generated
+         * @param dataPoint a test point
+         * @return the index of the predicted class
+         */
         public int predictClassIndex(DataPoint dataPoint) {
             if(childNodes == null) return voteByCount(); // there are no further child nodes, take a popular vote
             int childNodeIndex = splitAttributeValue.indexOf(dataPoint.attributes[splitAttribute].getDouble());
@@ -367,6 +393,11 @@ public class DecisionTree {
             return childNodes.get(childNodeIndex).predictClassIndex(dataPoint);
         }
 
+        /**
+         * Returns the most common class of the current node, this is usually only called for leaf nodes or nodes
+         * that never saw a particular value of an attribute
+         * @return the index of the most common class
+         */
         public int voteByCount() {
             int predictedClassIndex = 0;
             int numVotes = 0;
