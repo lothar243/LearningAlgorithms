@@ -52,9 +52,14 @@ public class FileIO {
 
     private static DataPoint parseAttributes(String[] line) {
         // each of the arguments in the first n-1 columns is a Double
-        Double [] attributes = new Double[line.length - 1];
+        Object [] attributes = new Object[line.length - 1];
         for (int i = 0; i < line.length - 1; i++) {
-            attributes[i] = Double.parseDouble(line[i]);
+            try {
+                attributes[i] = Double.parseDouble(line[i]);
+            }
+            catch(Exception e) {
+                attributes[i] = line[i];
+            }
         }
         // the entry in the last column is the classification, so pass it into the constructor
         return new DataPoint(attributes);

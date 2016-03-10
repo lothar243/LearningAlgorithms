@@ -65,12 +65,16 @@ class AttributeValue {
         if(this.isWildcard()) {
             return other.isWildcard();
         }
+        if(other.isWildcard()) return false;
         Object otherValue = other.getValue();
-        System.out.println(value.getClass() + " and " + otherValue.getClass());
         if(this.isNumeric() && other.isNumeric()) {
             final double EPSILON = .000001d;
-            System.out.println("both are numbers: " + value + " and " + otherValue);
-            return Math.abs((0d + value) - ((Double)otherValue)) < EPSILON;
+            double difference = Math.abs(getDouble() - (other.getDouble()));
+//            System.out.println("difference: " + difference);
+            return difference < EPSILON;
+        }
+        if(!value.getClass().equals(otherValue.getClass())) {
+            return false;
         }
         if(value.getClass().equals(String.class)) {
             return ((String)value).equals((String)otherValue);
@@ -94,7 +98,19 @@ class AttributeValue {
     }
 
     public Double getDouble() {
-        if (this.isNumeric()) return (Double) value;
+        if(value == null) return null;
+        if (!this.isNumeric()) return null;
+        if(value.getClass().equals(Double.class)) {
+            return (Double) value;
+        }
+        if(value.getClass().equals(Integer.class)) {
+            Double intValue = 0d + (Integer)value;
+//            System.out.println(value + " was converted to " + intValue);
+            return intValue;
+        }
+        if(value.getClass().equals(Float.class)) {
+            return 0d + (Float)value;
+        }
         return null;
     }
 
@@ -111,6 +127,9 @@ class AttributeValue {
 
 
     public AttributeValue copyOf() {
+        if(isWildcard()) {
+            return new AttributeValue(null);
+        }
         Object copiedValue = value;
         if(value.getClass().equals(String.class)) {
             copiedValue = "" + value;

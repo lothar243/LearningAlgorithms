@@ -40,6 +40,7 @@ public class CandidateElimination {
                     case "-p":
                         positiveString = args[argNum + 1];
                         argNum++;
+                        break;
                     default:
                         System.out.println("Unknown argument encountered: " + args[argNum] + " - use -h for help");
                         System.exit(0);
@@ -65,6 +66,9 @@ public class CandidateElimination {
         data.initializeForBinaryData(positiveString);
         FileIO.readFromFile(trainingDataFile, data);
         final int numAttributes = data.numAttributes;
+        for(DataPoint point: data.dataPoints) {
+            System.out.println(point);
+        }
 
         ArrayList<ArrayList<AttributeValue>> possibleValues = data.inferPossibleAttributeValues();
 
@@ -125,18 +129,19 @@ public class CandidateElimination {
     public static double determineAccuracy(ArrayList<DataPoint> testPoints, ArrayList<Expression> rules, boolean verbose) {
         int numPointsTested = 0;
         int numPointsCorrect = 0;
+        System.out.println("Test Points:");
         for(DataPoint point: testPoints) {
-            boolean correctClassification = true;
-            for(Expression rule: rules) {
-                if(!rule.isSatisfiedBy(point)) {
-                    if(verbose) {
-                        System.out.println("Point " + point + " fails to satisfy " + rule);
-                    }
-                    correctClassification = false;
-                }
-            }
+            System.out.println(point);
+        }
+        for(DataPoint point: testPoints) {
+            boolean classifiedAsPositive = Expression.classifiedAsPositive(rules, point);
+            boolean correctClassification = (classifiedAsPositive && point.classificationIndex == 0) ||
+                    (!classifiedAsPositive && point.classificationIndex != 0);
             if(correctClassification) {
                 numPointsCorrect++;
+            }
+            else {
+                System.out.println(point + " was classified incorrectly");
             }
             numPointsTested++;
         }
@@ -220,9 +225,21 @@ class Expression {
         return other.isMoreGeneralThan(this);
     }
 
+    public static boolean classifiedAsPositive(ArrayList<Expression> expressions, DataPoint point) {
+        for(Expression expression: expressions) {
+            if(expression.classifyAsPositive(point)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isSatisfiedBy(DataPoint point) {
-        if(classifyAsPositive(point))
+        if(classifyAsPositive(point)) {
+//            System.out.println("classified as positive");
             return point.classificationIndex == 0; // true if this is a positive example
+        }
+//        System.out.println("classified as negative");
         return point.classificationIndex != 0; // true if this is a negative example
     }
 
@@ -230,11 +247,9 @@ class Expression {
         if(nullExpression || values == null) return false;
         for (int i = 0; i < point.attributes.length; i++) {
             if(!(values[i].isWildcard() || values[i].equals(point.attributes[i]))) {
-                System.out.println(point + " was classified as negative");
                 return false; // something didn't match
             }
         }
-        System.out.println(point + " was classified as positive");
         return true; // we looked through each attribute, and they all matched or were wildcards
     }
 
@@ -348,7 +363,9 @@ class Expression {
                 }
             }
         }
+//        System.out.println("Before culling: " + output);
         Expression.removeMoreSpecificExpressions(output);
+//        System.out.println("After culling: " + output);
         return output;
     }
 

@@ -193,21 +193,41 @@ class DataPoint {
         this.attributes = AttributeValue.createArray(doubleAttributes);
         this.classificationIndex = classificationIndex;
     }
+    public DataPoint(AttributeValue[] attributes, int classificationIndex) {
+        this.attributes = attributes;
+        this.classificationIndex = classificationIndex;
+
+    }
+
+    public boolean equals(Object otherObject) {
+        if(!otherObject.getClass().equals(DataPoint.class)) return false;
+        DataPoint other = (DataPoint)otherObject;
+        if(this.classificationIndex != other.classificationIndex) return false;
+        if(this.attributes == null) {
+            return other.attributes == null;
+        }
+        if(this.attributes.length != other.attributes.length) return false;
+        for (int i = 0; i < this.attributes.length; i++) {
+            if(!this.attributes[i].equals(other.attributes[i])) return false;
+        }
+        return true;
+    }
 
     public String toString() {
         String output = "" + attributes[0];
         for (int i = 1; i < attributes.length; i++) {
             output += ", " + attributes[i];
         }
+        output += " Class index: " + classificationIndex;
         return output;
     }
 
     public DataPoint copyOf() {
-        Double[] copiedValues = new Double[attributes.length];
+        AttributeValue[] copiedValues = new AttributeValue[attributes.length];
         for (int i = 0; i < attributes.length; i++) {
-            copiedValues[i] = attributes[i].getDouble();
+            copiedValues[i] = attributes[i].copyOf();
         }
-        return new DataPoint(copiedValues, this.classificationIndex);
+        return new DataPoint(copiedValues, classificationIndex);
     }
 
     public static Double distanceSquared(DataPoint first, DataPoint second) {
