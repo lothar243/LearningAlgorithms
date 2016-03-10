@@ -96,4 +96,7 @@ class AttributeValue {
     }
 
 
+    public AttributeValue copyOf() {
+        return new AttributeValue(value);
+    }
 }

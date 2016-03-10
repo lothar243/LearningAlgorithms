@@ -1,11 +1,12 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * A class to store all the information regarding the data
  */
 public class Data {
-    public final ArrayList<DataPoint> dataPoints = new ArrayList<DataPoint>();
+    public final ArrayList<DataPoint> dataPoints = new ArrayList<>();
     Double[] minValues;
     Double[] maxValues;
     int numAttributes;
@@ -13,6 +14,43 @@ public class Data {
     public String [] attributeNames;
     ArrayList<String> classifications = new ArrayList<>();
     ArrayList<Integer> classificationCounts = new ArrayList<>();
+
+    private int crossFoldTestSize = 0;
+    private int crossFoldNumFolds;
+
+    public void initializeDataForCrossFoldValidation(int numFolds) {
+        crossFoldNumFolds = numFolds;
+        crossFoldTestSize = dataPoints.size() / numFolds;
+        Collections.shuffle(dataPoints);
+    }
+
+    public ArrayList<DataPoint> getCrossFoldTestData(int foldNumber) {
+        ArrayList<DataPoint> testData = new ArrayList<>();
+        if(foldNumber >= crossFoldNumFolds) return testData;
+
+        int testDataFrom = foldNumber * crossFoldTestSize;
+        int testDataTo = (foldNumber + 1) * crossFoldTestSize;
+        for(int i = testDataFrom; i < testDataTo; i++) {
+            testData.add(dataPoints.get(i).copyOf());
+        }
+        return testData;
+    }
+
+    public ArrayList<DataPoint> getCrossFoldTrainingData(int foldNumber) {
+        ArrayList<DataPoint> trainingData = new ArrayList<>();
+        if(foldNumber >= crossFoldNumFolds) return trainingData;
+
+        int testDataFrom = foldNumber * crossFoldTestSize;
+        int testDataTo = (foldNumber + 1) * crossFoldTestSize;
+        // add the data before and after the test data to the training set
+        for (int i = 0; i < testDataFrom; i++) {
+            trainingData.add(dataPoints.get(i).copyOf());
+        }
+        for(int i = testDataTo; i < dataPoints.size(); i++) {
+            trainingData.add(dataPoints.get(i).copyOf());
+        }
+        return trainingData;
+    }
 
     public Data() {
     }
@@ -22,6 +60,12 @@ public class Data {
         while(classificationCounts.size() < classifications.size()) {
             classificationCounts.add(0);
         }
+    }
+    public void initializeForBinaryData() {
+        classifications.add("0");
+        classifications.add("1");
+        classificationCounts.add(0);
+        classificationCounts.add(0);
     }
 
     public void setAttributeNames(String[] attributeNames) {
@@ -158,6 +202,14 @@ class DataPoint {
             output += ", " + attributes[i];
         }
         return output;
+    }
+
+    public DataPoint copyOf() {
+        Double[] copiedValues = new Double[attributes.length];
+        for (int i = 0; i < attributes.length; i++) {
+            copiedValues[i] = attributes[i].getDouble();
+        }
+        return new DataPoint(copiedValues, this.classificationIndex);
     }
 
     public static Double distanceSquared(DataPoint first, DataPoint second) {

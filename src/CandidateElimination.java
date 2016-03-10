@@ -9,6 +9,7 @@ public class CandidateElimination {
         float sufficientEntropy = 0;
         String trainingDataFile = null;
         String testDataFile = null;
+        int crossFoldNumFolds = -1;
 
         // read in optional arguments
         try {
@@ -27,9 +28,14 @@ public class CandidateElimination {
                     case "--verbose":
                         verbose = true;
                         break;
+                    case "-x":
+                        crossFoldNumFolds = Integer.parseInt(args[argNum + 1]);
+                        argNum++;
+                        break;
                     case "-h":
                     case "-help":
                         printHelpString();
+                        break;
                     default:
                         System.out.println("Unknown argument encountered: " + args[argNum] + " - use -h for help");
                         System.exit(0);
@@ -42,72 +48,109 @@ public class CandidateElimination {
         }
 
         if(trainingDataFile == null) {
-            System.out.println("You must specify a training file, use -h for help");
+            System.out.println("You must specify a training file");
+            System.exit(1);
+        }
+        if((testDataFile == null && crossFoldNumFolds == -1) || (testDataFile != null && crossFoldNumFolds != -1)) {
+            System.out.println("You must specify a test file or use cross fold validation (but not both)");
             System.exit(1);
         }
 
         // read in training data from file
-        Data trainingData = new Data();
-        FileIO.readFromFile(trainingDataFile, trainingData);
-        final int numAttributes = trainingData.numAttributes;
+        Data data = new Data();
+        data.initializeForBinaryData();
+        FileIO.readFromFile(trainingDataFile, data);
+        final int numAttributes = data.numAttributes;
 
-        ArrayList<ArrayList<AttributeValue>> possibleValues = trainingData.inferPossibleAttributeValues();
-        System.out.println("possibleValues" + possibleValues);
+        ArrayList<ArrayList<AttributeValue>> possibleValues = data.inferPossibleAttributeValues();
 
+        if(crossFoldNumFolds > 0) {
+            double overallAccuracy = 0;
+            data.initializeDataForCrossFoldValidation(crossFoldNumFolds);
+            for (int foldNumber = 0; foldNumber < crossFoldNumFolds; foldNumber++) {
+                ArrayList<DataPoint> trainingPoints = data.getCrossFoldTrainingData(foldNumber);
+                ArrayList<Expression> testRules = generateTestRules(trainingPoints, possibleValues, numAttributes);
+                double accuracyOfCurrentRules = 100 * determineAccuracy(data.getCrossFoldTestData(foldNumber), testRules, verbose);
+                System.out.println("Accuracy " + MyTools.roundTo(accuracyOfCurrentRules, 2));
+                if(verbose) {
+                    System.out.println("Expressions: " + testRules);
+                }
+                overallAccuracy += accuracyOfCurrentRules;
+            }
+            overallAccuracy /= crossFoldNumFolds;
+            System.out.println("Overall accuracy: " + MyTools.roundTo(overallAccuracy, 2));
+        }
+        else { // a specific testing file has been specified
+            Data testData = new Data();
+            testData.initializeForBinaryData();
+            FileIO.readFromFile(testDataFile, testData);
+
+            ArrayList<Expression> testRules = generateTestRules(data.dataPoints, possibleValues, numAttributes);
+            double accuracyOfRules = 100 * determineAccuracy(testData.dataPoints, testRules, verbose);
+            System.out.println("Accuracy " + MyTools.roundTo(accuracyOfRules, 2));
+            if(verbose) {
+                System.out.println("Expressions: " + testRules);
+            }
+        }
+
+    }
+
+    public static ArrayList<Expression> generateTestRules(ArrayList<DataPoint> trainingData, ArrayList<ArrayList<AttributeValue>> possibleValues,
+                                                             int numAttributes) {
         ArrayList<Expression> generalBoundary = Expression.initialGeneralBoundary(numAttributes);
         ArrayList<Expression> specificBoundary = Expression.initialSpecificBoundary();
 
-        int positiveExampleIndex = 0;
-        if(!trainingData.classifications.get(0).equalsIgnoreCase("1")) {
-            positiveExampleIndex = 1;
-        }
 
-
-        System.out.println("Starting expressions:");
-        System.out.println("General boundary:" + generalBoundary);
-        System.out.println("Specific boundary: " + specificBoundary);
-
-        for(DataPoint point: trainingData.dataPoints) {
-            System.out.println("Point: " + point);
-            if(point.classificationIndex == positiveExampleIndex) { // positive example
-                System.out.println("Positive example");
+        for(DataPoint point: trainingData) {
+            if(point.classificationIndex == 1) { // positive example
                 Expression.removeInconsistentExpressions(generalBoundary, point);
-                System.out.println("RemoveInconsistentExpressions (general): " + generalBoundary);
                 Expression.minimallyGeneralize(specificBoundary, point);
-                System.out.println("minimallyGeneralize (specific): " + specificBoundary);
                 Expression.removeMoreGeneralExpressions(specificBoundary);
-                System.out.println("removeMoreGeneralized (specific): " + specificBoundary);
             }
             else { // negative example
-                System.out.println("Negative example");
                 Expression.removeInconsistentExpressions(specificBoundary, point);
-                System.out.println("RemoveInconsistentExpressions (specific): " + specificBoundary);
                 Expression.minimallySpecify(generalBoundary, point, possibleValues);
-                System.out.println("minimallySpecify (general): " + generalBoundary);
                 Expression.removeMoreSpecificExpressions(generalBoundary);
-                System.out.println("removeMoreSpecific (general): " + generalBoundary);
             }
-            System.out.println("General boundary:" + generalBoundary);
-            System.out.println("Specific boundary: " + specificBoundary);
 
         }
-
-        System.out.println("Generated conditions");
-        System.out.println("General boundary:" + generalBoundary);
-        System.out.println("Specific boundary: " + specificBoundary);
+        // combine the boundaries to get a complete list of expressions
+        generalBoundary.addAll(specificBoundary);
+        return generalBoundary;
+    }
+    public static double determineAccuracy(ArrayList<DataPoint> testPoints, ArrayList<Expression> rules, boolean verbose) {
+        int numPointsTested = 0;
+        int numPointsCorrect = 0;
+        for(DataPoint point: testPoints) {
+            boolean correctClassification = true;
+            for(Expression rule: rules) {
+                if(!rule.isSatisfiedBy(point)) {
+                    if(verbose) {
+                        System.out.println("Point " + point + " fails to satisfy " + rule);
+                    }
+                    correctClassification = false;
+                }
+            }
+            if(correctClassification) {
+                numPointsCorrect++;
+            }
+            numPointsTested++;
+        }
+        return (double)numPointsCorrect / numPointsTested;
     }
 
     public static void printHelpString() {
-        final String helpString = "\nUsage: ./CandidateElimination.sh -t trainingData.csv -T testData.csv <optional arguments>\n\n" +
+        final String helpString = "\nUsage: ./CandidateElimination.sh -t trainingData.csv <optional arguments>\n\n" +
                 "Decision Tree implementation: Uses ID3, a greedy algorithm that prefers questions that maximize" +
                 "information gain.\n\n" +
                 "Optional Arguments: \n" +
-                "\t-v, --verbose\n" +
-                "\t\tverbose - show more information\n" +
-                "\t-tree\n" +
-                "\t\tshow full decision tree" +
-                "\t-e FLOAT" +
-                "\t\tspecify a sufficient entropyOf, range 0 - 1 (Default 0: Completely homogeneous data)";
+                "\t-T testData.csv\n" +
+                "\t\tSpecify which data to use as a test set\n" +
+                "\t-x NUM\n" +
+                "\t\tNUM-fold cross validation\n" +
+                "\t-v\n" +
+                "\t\tVerbose - show expressions";
+
         System.out.println(helpString);
         System.exit(1);
 
@@ -174,13 +217,19 @@ class Expression {
     }
 
     public boolean isSatisfiedBy(DataPoint point) {
-        if(nullExpression || values == null) return point.classificationIndex == 0;
+        if(classifyAsPositive(point))
+            return point.classificationIndex == 1;
+        return point.classificationIndex == 0;
+    }
+
+    public boolean classifyAsPositive(DataPoint point) {
+        if(nullExpression || values == null) return false;
         for (int i = 0; i < point.attributes.length; i++) {
             if(!(values[i].isWildcard() || values[i].equals(point.attributes[i]))) {
-                return point.classificationIndex == 0; // something didn't match
+                return false; // something didn't match
             }
         }
-        return point.classificationIndex == 1; // we looked through each attribute, and they all matched or were wildcards
+        return true; // we looked through each attribute, and they all matched or were wildcards
     }
 
     public static ArrayList<Expression> initialGeneralBoundary(int numAttributes) {
