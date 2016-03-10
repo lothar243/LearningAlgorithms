@@ -10,6 +10,7 @@ public class CandidateElimination {
         String trainingDataFile = null;
         String testDataFile = null;
         int crossFoldNumFolds = -1;
+        String positiveString = "1";
 
         // read in optional arguments
         try {
@@ -36,6 +37,9 @@ public class CandidateElimination {
                     case "-help":
                         printHelpString();
                         break;
+                    case "-p":
+                        positiveString = args[argNum + 1];
+                        argNum++;
                     default:
                         System.out.println("Unknown argument encountered: " + args[argNum] + " - use -h for help");
                         System.exit(0);
@@ -58,7 +62,7 @@ public class CandidateElimination {
 
         // read in training data from file
         Data data = new Data();
-        data.initializeForBinaryData();
+        data.initializeForBinaryData(positiveString);
         FileIO.readFromFile(trainingDataFile, data);
         final int numAttributes = data.numAttributes;
 
@@ -82,7 +86,7 @@ public class CandidateElimination {
         }
         else { // a specific testing file has been specified
             Data testData = new Data();
-            testData.initializeForBinaryData();
+            testData.initializeForBinaryData(positiveString);
             FileIO.readFromFile(testDataFile, testData);
 
             ArrayList<Expression> testRules = generateTestRules(data.dataPoints, possibleValues, numAttributes);
@@ -102,7 +106,7 @@ public class CandidateElimination {
 
 
         for(DataPoint point: trainingData) {
-            if(point.classificationIndex == 1) { // positive example
+            if(point.classificationIndex == 0) { // positive example
                 Expression.removeInconsistentExpressions(generalBoundary, point);
                 Expression.minimallyGeneralize(specificBoundary, point);
                 Expression.removeMoreGeneralExpressions(specificBoundary);
@@ -218,17 +222,19 @@ class Expression {
 
     public boolean isSatisfiedBy(DataPoint point) {
         if(classifyAsPositive(point))
-            return point.classificationIndex == 1;
-        return point.classificationIndex == 0;
+            return point.classificationIndex == 0; // true if this is a positive example
+        return point.classificationIndex != 0; // true if this is a negative example
     }
 
     public boolean classifyAsPositive(DataPoint point) {
         if(nullExpression || values == null) return false;
         for (int i = 0; i < point.attributes.length; i++) {
             if(!(values[i].isWildcard() || values[i].equals(point.attributes[i]))) {
+                System.out.println(point + " was classified as negative");
                 return false; // something didn't match
             }
         }
+        System.out.println(point + " was classified as positive");
         return true; // we looked through each attribute, and they all matched or were wildcards
     }
 
@@ -268,7 +274,8 @@ class Expression {
         }
         AttributeValue[] attributeValues = new AttributeValue[this.values.length];
         for (int i = 0; i < attributeValues.length; i++) {
-            attributeValues[i] = new AttributeValue(this.values[i].getDouble());
+            attributeValues[i] = this.values[i].copyOf();
+
         }
         return new Expression(attributeValues);
     }
@@ -280,7 +287,7 @@ class Expression {
     }
 
     public ArrayList<Expression> minimalGeneralizations(DataPoint point) {
-        if(point.classificationIndex == 0) return null; // this should only be used with positive examples
+        if(point.classificationIndex != 0) return null; // this should only be used with positive examples
         if(this.isSatisfiedBy(point)) {
             // no generalization is necessary, the point already satisfies the expression
             ArrayList<Expression> trivialList = new ArrayList<>();
@@ -316,7 +323,7 @@ class Expression {
         ArrayList<Expression> output = new ArrayList<>();
         // we begin by ensuring that our inputs are as expected... a negative example that does not satisfy the current
         // expression and is not the null expression
-        if(point.classificationIndex == 1) return output;
+        if(point.classificationIndex == 0) return output;
         if(this.isSatisfiedBy(point)) {
             output.add(this);
             return output;
@@ -415,7 +422,7 @@ class Expression {
      * @param point A positive example (It has a class of 1)
      */
     public static void minimallyGeneralize(ArrayList<Expression> specificBoundary, DataPoint point) {
-        if(point.classificationIndex == 0) {
+        if(point.classificationIndex != 0) {
             System.out.println("Error, negative examples should not generalize the S boundary");
             return;
         }
@@ -437,7 +444,7 @@ class Expression {
      */
     public static void minimallySpecify(ArrayList<Expression> generalizedBoundary, DataPoint point,
                                         ArrayList<ArrayList<AttributeValue>> possibleValues) {
-        if(point.classificationIndex == 1) {
+        if(point.classificationIndex == 0) {
             System.out.println("Error, positive examples should not be used to specialize the G boundary");
             return;
         }

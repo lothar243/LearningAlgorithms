@@ -38,7 +38,9 @@ public class DecisionTree {
                 "\t-tree\n" +
                 "\t\tshow full decision tree" +
                 "\t-e FLOAT" +
-                "\t\tspecify a sufficient entropyOf, range 0 - 1 (Default 0: Completely homogeneous data)";
+                "\t\tspecify a sufficient entropyOf, range 0 - 1 (Default 0: Completely homogeneous data)\n" +
+                "\t-p STRING\n" +
+                "\t\tspecify which string is a positive class";
         if (args.length < 2) {
             System.out.println(helpString);
             System.exit(1);

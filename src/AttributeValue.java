@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 /**
  * A generic type with some necessary methods
  */
@@ -7,7 +5,7 @@ class AttributeValue {
 
     Object value;
 
-    public static AttributeValue[] createArray(Double[] values) {
+    public static AttributeValue[] createArray(Object[] values) {
         AttributeValue[] array = new AttributeValue[values.length];
         for (int i = 0; i < array.length; i++) {
             array[i] = new AttributeValue(values[i]);
@@ -28,23 +26,28 @@ class AttributeValue {
     }
 
     public Double plus(AttributeValue other) {
-        if (this.isDouble() && other.isDouble()) {
+        if (this.isNumeric() && other.isNumeric()) {
             return (Double) value + (Double) other.getValue();
         }
         return null;
     }
 
     public boolean isLessThan(Double other) {
-        return this.isDouble() && (Double) value < other;
+        return this.isNumeric() && (Double) value < other;
     }
 
     public boolean isGreaterThan(Double other) {
-        return this.isDouble() && (Double) value > other;
+        return this.isNumeric() && (Double) value > other;
     }
 
-    public boolean isDouble() {
+    public boolean isNumeric() {
         if(value == null) return false;
-        return value.getClass().equals(Double.class);
+        Class classType = value.getClass();
+        return classType.equals(Double.class) || classType.equals(Integer.class) || classType.equals(Float.class);
+    }
+    public boolean isString() {
+        if(value == null) return false;
+        return value.getClass().equals(String.class);
     }
 
     public String toString() {
@@ -52,27 +55,38 @@ class AttributeValue {
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (!other.getClass().equals(AttributeValue.class)) {
+    public boolean equals(Object otherObject) {
+
+        if (!otherObject.getClass().equals(AttributeValue.class)) {
             return false;
         }
         // now it's safe to cast
-        AttributeValue otherValue = (AttributeValue)other;
+        AttributeValue other = (AttributeValue)otherObject;
         if(this.isWildcard()) {
-            return otherValue.isWildcard();
+            return other.isWildcard();
         }
-        return value.equals(otherValue.getValue());
+        Object otherValue = other.getValue();
+        System.out.println(value.getClass() + " and " + otherValue.getClass());
+        if(this.isNumeric() && other.isNumeric()) {
+            final double EPSILON = .000001d;
+            System.out.println("both are numbers: " + value + " and " + otherValue);
+            return Math.abs((0d + value) - ((Double)otherValue)) < EPSILON;
+        }
+        if(value.getClass().equals(String.class)) {
+            return ((String)value).equals((String)otherValue);
+        }
+        return value.equals(other.getValue());
     }
 
     public Double minus(AttributeValue other) {
-        if (this.isDouble() && other.isDouble()) {
+        if (this.isNumeric() && other.isNumeric()) {
             return (Double) value - (Double) other.getValue();
         }
         return null;
     }
 
     public Double minus(Double other) {
-        if (this.isDouble()) {
+        if (this.isNumeric()) {
             return (Double) value - other;
         }
         return null
@@ -80,7 +94,7 @@ class AttributeValue {
     }
 
     public Double getDouble() {
-        if (this.isDouble()) return (Double) value;
+        if (this.isNumeric()) return (Double) value;
         return null;
     }
 
@@ -97,6 +111,11 @@ class AttributeValue {
 
 
     public AttributeValue copyOf() {
+        Object copiedValue = value;
+        if(value.getClass().equals(String.class)) {
+            copiedValue = "" + value;
+        }
+
         return new AttributeValue(value);
     }
 }

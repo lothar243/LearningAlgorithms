@@ -61,10 +61,8 @@ public class Data {
             classificationCounts.add(0);
         }
     }
-    public void initializeForBinaryData() {
-        classifications.add("0");
-        classifications.add("1");
-        classificationCounts.add(0);
+    public void initializeForBinaryData(String positiveString) { // index zero is always the positive example
+        classifications.add(positiveString);
         classificationCounts.add(0);
     }
 
@@ -187,11 +185,11 @@ class DataPoint {
     int classificationIndex;
     public final AttributeValue[] attributes;
 
-    public DataPoint(Double[] doubleAttributes) {
+    public DataPoint(Object[] doubleAttributes) {
         this.attributes = AttributeValue.createArray(doubleAttributes);
         this.classificationIndex = -1;
     }
-    public DataPoint(Double[] doubleAttributes, int classificationIndex) {
+    public DataPoint(Object[] doubleAttributes, int classificationIndex) {
         this.attributes = AttributeValue.createArray(doubleAttributes);
         this.classificationIndex = classificationIndex;
     }

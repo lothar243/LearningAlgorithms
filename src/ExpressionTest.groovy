@@ -7,26 +7,33 @@ class ExpressionTest extends GroovyTestCase {
     Expression thirdExpression = createExpression(null, null, null, null); // reminder: null is used for wildcard
     Expression fourthExpression = createExpression(2, 2, 3, 4);
     Expression nullExpression = new Expression();
+    Expression mixedExpression = createExpression("test", 2, "test2", null);
 
     Double[] firstArray = [1d, 2d, 3d, 4d];
-    DataPoint firstTestPoint = new DataPoint(firstArray, 1);
-    DataPoint secondTestPoint = new DataPoint(firstArray, 0);
+    DataPoint firstTestPoint = new DataPoint(firstArray, 0);
+    DataPoint secondTestPoint = new DataPoint(firstArray, 1);
 
     Double[] secondArray = [1d, 2d, 3d, 3d];
-    DataPoint thirdTestPoint = new DataPoint(secondArray, 1);
-    DataPoint fourthTestPoint = new DataPoint(secondArray, 0);
+    DataPoint thirdTestPoint = new DataPoint(secondArray, 0);
+    DataPoint fourthTestPoint = new DataPoint(secondArray, 1);
+
+    Object[] thirdArray = ["test", 2d, "test2", 4];
+    DataPoint thirdArrayPositivePoint = new DataPoint(thirdArray, 0);
+    DataPoint thirdArrayNegativePoint = new DataPoint(thirdArray, 1);
 
     void testIsMoreGeneralThan() {
         assertTrue(createExpression(1,2,3,null).isMoreGeneralThan(createExpression(1,2,3,4)));
         assertFalse(createExpression(1,2,3,4).isMoreGeneralThan(createExpression(1,2,3,4)));
         assertFalse(createExpression(1,2,3,4).isMoreGeneralThan(createExpression(1,2,3,null)));
         assertFalse(createExpression(1,2,3,null).isMoreGeneralThan(createExpression(1,2,3,null)))
+        assertTrue(thirdExpression.isMoreGeneralThan(mixedExpression));
     }
     void testIsMoreSpecificThan() {
         assertFalse(createExpression(1,2,3,null).isMoreSpecificThan(createExpression(1,2,3,4)));
         assertFalse(createExpression(1,2,3,4).isMoreSpecificThan(createExpression(1,2,3,4)));
         assertTrue(createExpression(1,2,3,4).isMoreSpecificThan(createExpression(1,2,3,null)));
-        assertFalse(createExpression(1,2,3,null).isMoreSpecificThan(createExpression(1,2,3,null)))
+        assertFalse(createExpression(1,2,3,null).isMoreSpecificThan(createExpression(1,2,3,null)));
+        assertFalse(thirdExpression.isMoreSpecificThan(mixedExpression));
     }
 
     void testIsSatisfiedBy() {
@@ -46,7 +53,11 @@ class ExpressionTest extends GroovyTestCase {
         assertFalse(nullExpression.isSatisfiedBy(firstTestPoint));
         assertTrue(nullExpression.isSatisfiedBy(secondTestPoint));
 
+        assertTrue(thirdExpression.isSatisfiedBy(thirdArrayPositivePoint));
+        assertFalse(thirdExpression.isSatisfiedBy(thirdArrayNegativePoint));
 
+        assertTrue(mixedExpression.isSatisfiedBy(thirdArrayPositivePoint));
+        assertFalse(mixedExpression.isSatisfiedBy(thirdArrayNegativePoint));
     }
 
     void testRemoveInconsistentExpressions() {
@@ -159,7 +170,7 @@ class ExpressionTest extends GroovyTestCase {
         }
     }
 
-    public static Expression createExpression(Double a, Double b, Double c, Double d) {
+    public static Expression createExpression(Object a, Object b, Object c, Object d) {
         AttributeValue[] attributeValues = new AttributeValue[4];
         attributeValues[0] = new AttributeValue(a);
         attributeValues[1] = new AttributeValue(b);
@@ -175,6 +186,7 @@ class ExpressionTest extends GroovyTestCase {
         testBoundary.add(thirdExpression);
         testBoundary.add(fourthExpression);
         testBoundary.add(nullExpression);
+        testBoundary.add(mixedExpression);
         return testBoundary;
     }
 
