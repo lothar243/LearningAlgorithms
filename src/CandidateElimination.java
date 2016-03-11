@@ -103,6 +103,13 @@ public class CandidateElimination {
 
     }
 
+    /**
+     * Generates the general and specific boundaries of the candidate elimination algorithm based on the training data
+     * @param trainingData A list of DataPoints used for training
+     * @param possibleValues A double indexed ArrayList, giving all possible values of each of the attributes
+     * @param numAttributes The total number of attributes
+     * @return The list of expressions generated after running the algorithm
+     */
     public static ArrayList<Expression> generateTestRules(ArrayList<DataPoint> trainingData, ArrayList<ArrayList<AttributeValue>> possibleValues,
                                                              int numAttributes) {
         ArrayList<Expression> generalBoundary = Expression.initialGeneralBoundary(numAttributes);
@@ -126,6 +133,14 @@ public class CandidateElimination {
         generalBoundary.addAll(specificBoundary);
         return generalBoundary;
     }
+
+    /**
+     * Determine the accuracy of a particular list of expressions
+     * @param testPoints Points to test the expressions against
+     * @param rules The list of expressions used for prediction
+     * @param verbose True to output missed classifications to the console
+     * @return Number of correct predictions divided by number of total predictions - in the interval [0,1]
+     */
     public static double determineAccuracy(ArrayList<DataPoint> testPoints, ArrayList<Expression> rules, boolean verbose) {
         int numPointsTested = 0;
         int numPointsCorrect = 0;
@@ -148,6 +163,9 @@ public class CandidateElimination {
         return (double)numPointsCorrect / numPointsTested;
     }
 
+    /**
+     * Print some output to help guide the user on the correct use of the command line arguments
+     */
     public static void printHelpString() {
         final String helpString = "\nUsage: ./CandidateElimination.sh -t trainingData.csv <optional arguments>\n\n" +
                 "Decision Tree implementation: Uses ID3, a greedy algorithm that prefers questions that maximize" +
@@ -189,6 +207,11 @@ class Expression {
         nullExpression = true;
     }
 
+    /**
+     * Determine if the current expression is more general than another expression
+     * @param other The expression being compared against
+     * @return True if the current expression has more wildcards overall, and is at least as general than the other in all attributes
+     */
     public boolean isMoreGeneralThan(Expression other) {
         if(nullExpression || this.values == null) return false;
         if(other.values == null) return true;
@@ -221,10 +244,22 @@ class Expression {
         }
         return moreBlanks;
     }
+
+    /**
+     * Determine if the current expression is more specific than another expression
+     * @param other The expression being compared against
+     * @return True if the current expression has fewer wildcards overall, and is at least as specific than the other in all attributes
+     */
     public boolean isMoreSpecificThan(Expression other) {
         return other.isMoreGeneralThan(this);
     }
 
+    /**
+     * Tests a point against a list of expressions to determine if the point is predicted to be positive
+     * @param expressions The list of expressions to test agains
+     * @param point The point we're trying to predict the class of
+     * @return True if the point matches any of the expressions in the list
+     */
     public static boolean classifiedAsPositive(ArrayList<Expression> expressions, DataPoint point) {
         for(Expression expression: expressions) {
             if(expression.classifyAsPositive(point)) {
@@ -234,15 +269,23 @@ class Expression {
         return false;
     }
 
+    /**
+     * Determine if the current expression correctly classifies the given point
+     * @param point The point to test
+     * @return True if the point is classified as positive and actually is, or if it's classified as negative and actually is
+     */
     public boolean isSatisfiedBy(DataPoint point) {
         if(classifyAsPositive(point)) {
-//            System.out.println("classified as positive");
             return point.classificationIndex == 0; // true if this is a positive example
         }
-//        System.out.println("classified as negative");
         return point.classificationIndex != 0; // true if this is a negative example
     }
 
+    /**
+     * Test to see if the given point matches the current expression
+     * @param point The point to test
+     * @return True if there is a match, False if not
+     */
     public boolean classifyAsPositive(DataPoint point) {
         if(nullExpression || values == null) return false;
         for (int i = 0; i < point.attributes.length; i++) {
@@ -253,6 +296,11 @@ class Expression {
         return true; // we looked through each attribute, and they all matched or were wildcards
     }
 
+    /**
+     * Gives a starting point for the general boundary, which is just a single expression with all wildcards
+     * @param numAttributes The number of attributes of each of the dataPoints (Also, the number of wildcards)
+     * @return A list containing only a full-wildcard expression
+     */
     public static ArrayList<Expression> initialGeneralBoundary(int numAttributes) {
         AttributeValue[] attributeValues = new AttributeValue[numAttributes];
         for (int i = 0; i < numAttributes; i++) {
@@ -264,6 +312,11 @@ class Expression {
         return output;
     }
 
+    /**
+     * Create a copy of the Expression, but replaces the value at a given position with a wildcard
+     * @param position The position of the desired wildcard
+     * @return The copied (and altered) expression
+     */
     public Expression copyWithWildcardAtPosition(int position) {
         Expression modifiedCopy = this.copyOf();
         if(modifiedCopy.nullExpression || modifiedCopy.values == null) {
@@ -273,6 +326,11 @@ class Expression {
         modifiedCopy.values[position].setToWildcard();
         return modifiedCopy;
     }
+    /**
+     * Create a copy of the Expression, but a value at the given position
+     * @param position The position to place the value
+     * @return The copied (and altered) expression
+     */
     public Expression copyWithValueAtPosition(int position, AttributeValue value) {
         Expression modifiedCopy = this.copyOf();
         if(modifiedCopy.nullExpression || modifiedCopy.values == null) {
@@ -295,20 +353,24 @@ class Expression {
         return new Expression(attributeValues);
     }
 
+    /**
+     * Generates an initial boundary for the specific side of candidate elimination
+     * @return An ArrayList with only the null expression
+     */
     public static ArrayList<Expression> initialSpecificBoundary() {
         ArrayList<Expression> output = new ArrayList<>();
         output.add(new Expression());
         return output;
     }
 
+    /**
+     * Generates expressions that are minimally generalizations of the current expression such that they are satisfied
+     * by a given point
+     * @param point The point that should satisfy the expressions
+     * @return All minimally generalized expressions that are satisfied by the point
+     */
     public ArrayList<Expression> minimalGeneralizations(DataPoint point) {
         if(point.classificationIndex != 0) return null; // this should only be used with positive examples
-        if(this.isSatisfiedBy(point)) {
-            // no generalization is necessary, the point already satisfies the expression
-            ArrayList<Expression> trivialList = new ArrayList<>();
-            trivialList.add(this);
-            return trivialList;
-        }
         ArrayList<Expression> output = new ArrayList<>();
         // if the specific boundary is currently the null expression, set it to accept only return true for the current point
         if(this.nullExpression || this.values == null) {
@@ -332,7 +394,12 @@ class Expression {
         Expression.removeMoreGeneralExpressions(output);
         return output;
     }
-
+    /**
+     * Generates expressions that are minimally more specific of the current expression such that they are satisfied
+     * by a given point
+     * @param point The point that should satisfy the expressions
+     * @return All minimally more specific expressions that are satisfied by the point
+     */
     public ArrayList<Expression> minimalSpecifications(DataPoint point,
                                                         ArrayList<ArrayList<AttributeValue>> possibleValues) {
         ArrayList<Expression> output = new ArrayList<>();
@@ -363,9 +430,7 @@ class Expression {
                 }
             }
         }
-//        System.out.println("Before culling: " + output);
         Expression.removeMoreSpecificExpressions(output);
-//        System.out.println("After culling: " + output);
         return output;
     }
 
@@ -391,6 +456,11 @@ class Expression {
         return true;
     }
 
+    /**
+     * Remove all expressions from a list that are not satisfied by the given point
+     * @param boundary The list of expressions
+     * @param point The point that should satisfy all of the expressions
+     */
     public static void removeInconsistentExpressions(ArrayList<Expression> boundary, DataPoint point) {
         // i'm counting down here instead of up because I'm going to be removing expressions and I don't want the
         // changing indices to cause problems
@@ -400,6 +470,11 @@ class Expression {
             }
         }
     }
+
+    /**
+     * Remove any expression from a list for which there is a more specific expression
+     * @param specificBoundary The list of expressions (The boundary from the specific side)
+     */
     public static void removeMoreGeneralExpressions(ArrayList<Expression> specificBoundary) {
         // used to remove unwanted expressions from the specific boundary (anything that is more general)
         for (int i = specificBoundary.size() - 1; i >= 0; i--) {
@@ -417,6 +492,11 @@ class Expression {
             }
         }
     }
+
+    /**
+     * Remove any expressions from a list for which there are more general expressions
+     * @param generalBoundary The list of expressions (The boundary from the general side)
+     */
     public static void removeMoreSpecificExpressions(ArrayList<Expression> generalBoundary) {
         for(int i = generalBoundary.size() - 1; i >= 0; i--) {
             Expression currentExpression = generalBoundary.get(i);
