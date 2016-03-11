@@ -208,7 +208,7 @@ class ExpressionTest extends GroovyTestCase {
         ArrayList<Expression> generalBoundary = Expression.initialGeneralBoundary(4);
         assertEquals(1, generalBoundary.size());
         Expression initialExpression = generalBoundary.get(0);
-        System.out.println("Initial expression from boundary: " + initialExpression);
+//        System.out.println("Initial expression from boundary: " + initialExpression);
         for (int i = 0; i < 4; i++) {
             assertTrue(initialExpression.values[i].isWildcard());
         }
@@ -223,16 +223,16 @@ class ExpressionTest extends GroovyTestCase {
         dataPoints.add(createDataPoint(1,2,3,4,0))
         dataPoints.add(createDataPoint(1,2,4,4,0))
         dataPoints.add(createDataPoint(1,3,3,3,0))
-        assertEquals(1d, CandidateElimination.determineAccuracy(dataPoints, boundary, true));
+        assertEquals(1d, CandidateElimination.determineAccuracy(dataPoints, boundary, false));
 
         dataPoints.add(createDataPoint(2, 2, 3, 4, 0)); // will be incorrectly classified
-        assertEquals(0.75d, CandidateElimination.determineAccuracy(dataPoints, boundary, true));
+        assertEquals(0.75d, CandidateElimination.determineAccuracy(dataPoints, boundary, false));
 
         dataPoints.add(createDataPoint(2, 2, 3, 4, 1)); // will be accurately classified
-        assertEquals(0.8d, CandidateElimination.determineAccuracy(dataPoints, boundary, true));
+        assertEquals(0.8d, CandidateElimination.determineAccuracy(dataPoints, boundary, false));
 
         dataPoints.add(createDataPoint(1, 4, 3, 0, 1)); // will be incorrectly classified
-        assertEquals(2d/3, CandidateElimination.determineAccuracy(dataPoints, boundary, true));
+        assertEquals(2d/3, CandidateElimination.determineAccuracy(dataPoints, boundary, false));
 
     }
 
@@ -302,10 +302,8 @@ class ExpressionTest extends GroovyTestCase {
         DataPoint point = new DataPoint(objects, 0);
 
         DataPoint point2 = point.copyOf();
-        System.out.println("Point: " + point);
-        System.out.println("Point2: " + point2);
+//        System.out.println("Point: " + point);
+//        System.out.println("Point2: " + point2);
         assertTrue(point.equals(point2));
     }
-
-    public void testGet
 }

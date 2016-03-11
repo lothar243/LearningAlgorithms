@@ -60,15 +60,20 @@ public class CandidateElimination {
             System.out.println("You must specify a test file or use cross fold validation (but not both)");
             System.exit(1);
         }
+        else {
+            if(crossFoldNumFolds != -1) {
+                System.out.println("Using " + crossFoldNumFolds + "-fold validation");
+            }
+            else {
+                System.out.println("Using the test file " + testDataFile);
+            }
+        }
 
         // read in training data from file
         Data data = new Data();
         data.initializeForBinaryData(positiveString);
         FileIO.readFromFile(trainingDataFile, data);
         final int numAttributes = data.numAttributes;
-        for(DataPoint point: data.dataPoints) {
-            System.out.println(point);
-        }
 
         ArrayList<ArrayList<AttributeValue>> possibleValues = data.inferPossibleAttributeValues();
 
@@ -144,10 +149,6 @@ public class CandidateElimination {
     public static double determineAccuracy(ArrayList<DataPoint> testPoints, ArrayList<Expression> rules, boolean verbose) {
         int numPointsTested = 0;
         int numPointsCorrect = 0;
-        System.out.println("Test Points:");
-        for(DataPoint point: testPoints) {
-            System.out.println(point);
-        }
         for(DataPoint point: testPoints) {
             boolean classifiedAsPositive = Expression.classifiedAsPositive(rules, point);
             boolean correctClassification = (classifiedAsPositive && point.classificationIndex == 0) ||
@@ -156,7 +157,7 @@ public class CandidateElimination {
                 numPointsCorrect++;
             }
             else {
-                System.out.println(point + " was classified incorrectly");
+                if(verbose) System.out.println(point + " was classified incorrectly");
             }
             numPointsTested++;
         }
