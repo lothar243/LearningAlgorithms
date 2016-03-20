@@ -11,6 +11,7 @@ public class CandidateElimination {
         String testDataFile = null;
         int crossFoldNumFolds = -1;
         String positiveString = "1";
+        boolean positiveStringSpecified = false;
 
         // read in optional arguments
         try {
@@ -39,6 +40,7 @@ public class CandidateElimination {
                         break;
                     case "-p":
                         positiveString = args[argNum + 1];
+                        positiveStringSpecified = true;
                         argNum++;
                         break;
                     default:
@@ -68,6 +70,13 @@ public class CandidateElimination {
                 System.out.println("Using the test file " + testDataFile);
             }
         }
+        if(positiveStringSpecified) {
+            System.out.println("Using \"" + positiveString + "\" as the positive classification");
+        }
+        else {
+            System.out.println("No positive classification specified, defaulting to \"1\"");
+        }
+        System.out.println();
 
         // read in training data from file
         Data data = new Data();
