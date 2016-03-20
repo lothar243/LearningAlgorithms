@@ -53,11 +53,11 @@ public class CandidateElimination {
         }
 
         if(trainingDataFile == null) {
-            System.out.println("You must specify a training file");
+            System.out.println("You must specify a training file with \"-T FILENAME\"");
             System.exit(1);
         }
         if((testDataFile == null && crossFoldNumFolds == -1) || (testDataFile != null && crossFoldNumFolds != -1)) {
-            System.out.println("You must specify a test file or use cross fold validation (but not both)");
+            System.out.println("You must specify a test file (with \"-t FILENAME\") or use cross fold validation (with \"-x 10\"), but not both");
             System.exit(1);
         }
         else {
