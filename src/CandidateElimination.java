@@ -92,8 +92,9 @@ public class CandidateElimination {
             for (int foldNumber = 0; foldNumber < crossFoldNumFolds; foldNumber++) {
                 ArrayList<DataPoint> trainingPoints = data.getCrossFoldTrainingData(foldNumber);
                 ArrayList<Expression> testRules = generateTestRules(trainingPoints, possibleValues, numAttributes);
+                System.out.println("Iteration: " + foldNumber);
                 double accuracyOfCurrentRules = 100 * determineAccuracy(data.getCrossFoldTestData(foldNumber), testRules, verbose);
-                    System.out.println("Iteration: " + foldNumber + ", Accuracy: " + MyTools.roundTo(accuracyOfCurrentRules, 2));
+                System.out.println("Accuracy: " + MyTools.roundTo(accuracyOfCurrentRules, 2));
                 if(verbose) {
                     System.out.println("Version space: " + testRules + "\n");
                 }
@@ -154,6 +155,7 @@ public class CandidateElimination {
      * @return Number of correct predictions divided by number of total predictions - in the interval [0,1]
      */
     public static double determineAccuracy(ArrayList<DataPoint> testPoints, ArrayList<Expression> rules, boolean verbose) {
+        int truePositives = 0, falsePositives = 0, trueNegatives = 0, falseNegatives = 0;
         int numPointsTested = 0;
         int numPointsCorrect = 0;
         for(DataPoint point: testPoints) {
@@ -162,11 +164,27 @@ public class CandidateElimination {
                     (!classifiedAsPositive && point.classificationIndex != 0);
             if(correctClassification) {
                 numPointsCorrect++;
+                if(point.classificationIndex == 0)
+                    truePositives++;
+                else
+                    trueNegatives++;
             }
             else {
                 if(verbose) System.out.println(point + " was classified incorrectly");
+                if(point.classificationIndex == 0)
+                    falseNegatives++;
+                else
+                    falsePositives++;
             }
             numPointsTested++;
+        }
+
+        if(verbose) {
+            System.out.println("Confusion Matrix: \n" +
+                    "               Predicted               \n" +
+                    "               \tPos\tNeg\n" +
+                    "Actual     Pos \t" + truePositives + "\t" + falseNegatives + "\n" +
+                    "           Neg \t" + falsePositives + "\t" + trueNegatives + "\n");
         }
         return (double)numPointsCorrect / numPointsTested;
     }
