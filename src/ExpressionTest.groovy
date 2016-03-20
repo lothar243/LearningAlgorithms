@@ -39,28 +39,28 @@ class ExpressionTest extends GroovyTestCase {
 
     void testIsSatisfiedBy() {
 
-        assertTrue(firstExpression.isSatisfiedBy(firstArrayPositivePoint));
-        assertFalse(firstExpression.isSatisfiedBy(firstArrayNegativePoint));
+        assertTrue(firstExpression.isConsistentWith(firstArrayPositivePoint));
+        assertFalse(firstExpression.isConsistentWith(firstArrayNegativePoint));
 
-        assertTrue(secondExpression.isSatisfiedBy(firstArrayPositivePoint));
-        assertFalse(secondExpression.isSatisfiedBy(firstArrayNegativePoint));
+        assertTrue(secondExpression.isConsistentWith(firstArrayPositivePoint));
+        assertFalse(secondExpression.isConsistentWith(firstArrayNegativePoint));
 
-        assertTrue(thirdExpression.isSatisfiedBy(firstArrayPositivePoint));
-        assertFalse(thirdExpression.isSatisfiedBy(firstArrayNegativePoint));
+        assertTrue(thirdExpression.isConsistentWith(firstArrayPositivePoint));
+        assertFalse(thirdExpression.isConsistentWith(firstArrayNegativePoint));
 
-        assertFalse(fourthExpression.isSatisfiedBy(firstArrayPositivePoint));
-        assertTrue(fourthExpression.isSatisfiedBy(firstArrayNegativePoint));
+        assertFalse(fourthExpression.isConsistentWith(firstArrayPositivePoint));
+        assertTrue(fourthExpression.isConsistentWith(firstArrayNegativePoint));
 
-        assertFalse(nullExpression.isSatisfiedBy(firstArrayPositivePoint));
-        assertTrue(nullExpression.isSatisfiedBy(firstArrayNegativePoint));
+        assertFalse(nullExpression.isConsistentWith(firstArrayPositivePoint));
+        assertTrue(nullExpression.isConsistentWith(firstArrayNegativePoint));
 
-        assertTrue(thirdExpression.isSatisfiedBy(thirdArrayPositivePoint));
-        assertFalse(thirdExpression.isSatisfiedBy(thirdArrayNegativePoint));
+        assertTrue(thirdExpression.isConsistentWith(thirdArrayPositivePoint));
+        assertFalse(thirdExpression.isConsistentWith(thirdArrayNegativePoint));
 
-        assertTrue(mixedExpression.isSatisfiedBy(thirdArrayPositivePoint));
-        assertFalse(mixedExpression.isSatisfiedBy(thirdArrayNegativePoint));
+        assertTrue(mixedExpression.isConsistentWith(thirdArrayPositivePoint));
+        assertFalse(mixedExpression.isConsistentWith(thirdArrayNegativePoint));
 
-        assertTrue(createExpression(null, 1, null, null).isSatisfiedBy(firstArrayNegativePoint));
+        assertTrue(createExpression(null, 1, null, null).isConsistentWith(firstArrayNegativePoint));
 
     }
 

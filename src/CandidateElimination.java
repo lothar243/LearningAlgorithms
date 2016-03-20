@@ -124,12 +124,12 @@ public class CandidateElimination {
         for(DataPoint point: trainingData) {
             if(point.classificationIndex == 0) { // positive example
                 Expression.removeInconsistentExpressions(generalBoundary, point);
-                Expression.minimallyGeneralize(specificBoundary, point);
+                Expression.minimallyGeneralize(specificBoundary, generalBoundary, point);
                 Expression.removeMoreGeneralExpressions(specificBoundary);
             }
             else { // negative example
                 Expression.removeInconsistentExpressions(specificBoundary, point);
-                Expression.minimallySpecify(generalBoundary, point, possibleValues);
+                Expression.minimallySpecify(generalBoundary, specificBoundary, point, possibleValues);
                 Expression.removeMoreSpecificExpressions(generalBoundary);
             }
 
@@ -150,7 +150,7 @@ public class CandidateElimination {
         int numPointsTested = 0;
         int numPointsCorrect = 0;
         for(DataPoint point: testPoints) {
-            boolean classifiedAsPositive = Expression.classifiedAsPositive(rules, point);
+            boolean classifiedAsPositive = Expression.atLeastOneSatisfies(rules, point);
             boolean correctClassification = (classifiedAsPositive && point.classificationIndex == 0) ||
                     (!classifiedAsPositive && point.classificationIndex != 0);
             if(correctClassification) {
@@ -261,9 +261,9 @@ class Expression {
      * @param point The point we're trying to predict the class of
      * @return True if the point matches any of the expressions in the list
      */
-    public static boolean classifiedAsPositive(ArrayList<Expression> expressions, DataPoint point) {
+    public static boolean atLeastOneSatisfies(ArrayList<Expression> expressions, DataPoint point) {
         for(Expression expression: expressions) {
-            if(expression.classifyAsPositive(point)) {
+            if(expression.isSatisfiedBy(point)) {
                 return true;
             }
         }
@@ -275,19 +275,19 @@ class Expression {
      * @param point The point to test
      * @return True if the point is classified as positive and actually is, or if it's classified as negative and actually is
      */
-    public boolean isSatisfiedBy(DataPoint point) {
-        if(classifyAsPositive(point)) {
+    public boolean isConsistentWith(DataPoint point) {
+        if(isSatisfiedBy(point)) {
             return point.classificationIndex == 0; // true if this is a positive example
         }
         return point.classificationIndex != 0; // true if this is a negative example
     }
 
     /**
-     * Test to see if the given point matches the current expression
+     * Test to see if the given point matches the pattern of the current expression
      * @param point The point to test
      * @return True if there is a match, False if not
      */
-    public boolean classifyAsPositive(DataPoint point) {
+    public boolean isSatisfiedBy(DataPoint point) {
         if(nullExpression || values == null) return false;
         for (int i = 0; i < point.attributes.length; i++) {
             if(!(values[i].isWildcard() || values[i].equals(point.attributes[i]))) {
@@ -366,11 +366,11 @@ class Expression {
 
     /**
      * Generates expressions that are minimally generalizations of the current expression such that they are satisfied
-     * by a given point
+     * by a given point and some member of G is more general than the expression
      * @param point The point that should satisfy the expressions
      * @return All minimally generalized expressions that are satisfied by the point
      */
-    public ArrayList<Expression> minimalGeneralizations(DataPoint point) {
+    public ArrayList<Expression> minimalGeneralizations(DataPoint point, ArrayList<Expression> generalBoundary) {
         if(point.classificationIndex != 0) return null; // this should only be used with positive examples
         ArrayList<Expression> output = new ArrayList<>();
         // if the specific boundary is currently the null expression, set it to accept only return true for the current point
@@ -383,11 +383,14 @@ class Expression {
         for (int i = 0; i < point.attributes.length; i++) {
             if(this.values[i].isNotWildcard()) {
                 Expression newExpression = this.copyWithWildcardAtPosition(i);
-                if(!newExpression.isSatisfiedBy(point)) {
-                    output.addAll(newExpression.minimalGeneralizations(point));
-                }
-                else {
-                    output.add(newExpression);
+                if(newExpression.isMoreSpecificThanAtLeastOne(generalBoundary)) {
+                    if (newExpression.isConsistentWith(point)) {
+                        // we are general enough to satisfy the point
+                        output.add(newExpression);
+                    } else {
+                        // get more general
+                        output.addAll(newExpression.minimalGeneralizations(point, generalBoundary));
+                    }
                 }
             }
         }
@@ -395,6 +398,25 @@ class Expression {
         Expression.removeMoreGeneralExpressions(output);
         return output;
     }
+
+    public boolean isMoreSpecificThanAtLeastOne(ArrayList<Expression> generalBoundary) {
+        for(Expression expression: generalBoundary) {
+            if(this.isMoreSpecificThan(expression)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isMoreGeneralThanAtLeastOne(ArrayList<Expression> specificBoundary) {
+        for(Expression expression: specificBoundary) {
+            if(this.isMoreGeneralThan(expression)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Generates expressions that are minimally more specific of the current expression such that they are satisfied
      * by a given point
@@ -402,12 +424,13 @@ class Expression {
      * @return All minimally more specific expressions that are satisfied by the point
      */
     public ArrayList<Expression> minimalSpecifications(DataPoint point,
-                                                        ArrayList<ArrayList<AttributeValue>> possibleValues) {
+                                                       ArrayList<ArrayList<AttributeValue>> possibleValues,
+                                                       ArrayList<Expression> specificBoundary) {
         ArrayList<Expression> output = new ArrayList<>();
         // we begin by ensuring that our inputs are as expected... a negative example that does not satisfy the current
         // expression and is not the null expression
         if(point.classificationIndex == 0) return output;
-        if(this.isSatisfiedBy(point)) {
+        if(this.isConsistentWith(point)) {
             output.add(this);
             return output;
         }
@@ -422,11 +445,13 @@ class Expression {
             if(this.values[i].isWildcard()) {
                 for(AttributeValue possibleValue: possibleValues.get(i)) {
                     Expression specifiedExpression = this.copyWithValueAtPosition(i, possibleValue);
-                    if(specifiedExpression.isSatisfiedBy(point)) {
-                        output.add(specifiedExpression);
-                    }
-                    else {
-                        output.addAll(specifiedExpression.minimalSpecifications(point, possibleValues));
+                    if(specifiedExpression.isMoreGeneralThanAtLeastOne(specificBoundary)) {
+                        if(specifiedExpression.isConsistentWith(point)) {
+                            output.add(specifiedExpression);
+                        }
+                        else {
+                            output.addAll(specifiedExpression.minimalSpecifications(point, possibleValues, specificBoundary));
+                        }
                     }
                 }
             }
@@ -437,10 +462,20 @@ class Expression {
 
     @Override
     public String toString() {
+        if(nullExpression || values == null) {
+            return "Null expression";
+        }
+        String[] stringValues = new String[values.length];
+        for (int i = 0; i < values.length; i++) {
+            if(values[i] == null || values[i].isWildcard()) {
+                stringValues[i] = "?";
+            }
+            else {
+                stringValues[i] = values[i].toString();
+            }
+        }
         return "Expression{" +
-                "values=" + Arrays.toString(values) +
-                ", nullExpression=" + nullExpression +
-                '}';
+                "values=" + Arrays.toString(stringValues) + "}";
     }
 
     public boolean equals(Object other) {
@@ -466,7 +501,7 @@ class Expression {
         // i'm counting down here instead of up because I'm going to be removing expressions and I don't want the
         // changing indices to cause problems
         for (int i = boundary.size() - 1; i >= 0; i--) {
-            if(!boundary.get(i).isSatisfiedBy(point)) {
+            if(!boundary.get(i).isConsistentWith(point)) {
                 boundary.remove(i);
             }
         }
@@ -519,16 +554,16 @@ class Expression {
      * @param specificBoundary The S boundary
      * @param point A positive example (It has a class of 1)
      */
-    public static void minimallyGeneralize(ArrayList<Expression> specificBoundary, DataPoint point) {
+    public static void minimallyGeneralize(ArrayList<Expression> specificBoundary, ArrayList<Expression> generalBoundary, DataPoint point) {
         if(point.classificationIndex != 0) {
             System.out.println("Error, negative examples should not generalize the S boundary");
             return;
         }
         for(int i = specificBoundary.size() - 1; i >= 0; i--) {
             Expression currentExpression = specificBoundary.get(i);
-            if(!currentExpression.isSatisfiedBy(point)) {
+            if(!currentExpression.isConsistentWith(point)) {
                 specificBoundary.remove(i);
-                specificBoundary.addAll(currentExpression.minimalGeneralizations(point));
+                specificBoundary.addAll(currentExpression.minimalGeneralizations(point, generalBoundary));
             }
         }
     }
@@ -540,7 +575,9 @@ class Expression {
      * @param point A negative example (Class of 0)
      * @param possibleValues All possible values of each of the attributes - needed to generate specializations
      */
-    public static void minimallySpecify(ArrayList<Expression> generalizedBoundary, DataPoint point,
+    public static void minimallySpecify(ArrayList<Expression> generalizedBoundary,
+                                        ArrayList<Expression> specificBoundary,
+                                        DataPoint point,
                                         ArrayList<ArrayList<AttributeValue>> possibleValues) {
         if(point.classificationIndex == 0) {
             System.out.println("Error, positive examples should not be used to specialize the G boundary");
@@ -548,9 +585,9 @@ class Expression {
         }
         for(int i = generalizedBoundary.size() - 1; i >= 0; i--) {
             Expression currentExpression = generalizedBoundary.get(i);
-            if(!currentExpression.isSatisfiedBy(point)) {
+            if(!currentExpression.isConsistentWith(point)) {
                 generalizedBoundary.remove(i);
-                generalizedBoundary.addAll(currentExpression.minimalSpecifications(point, possibleValues));
+                generalizedBoundary.addAll(currentExpression.minimalSpecifications(point, possibleValues, specificBoundary));
             }
         }
         Expression.removeMoreSpecificExpressions(generalizedBoundary);
