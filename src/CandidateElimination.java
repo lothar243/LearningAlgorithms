@@ -84,9 +84,9 @@ public class CandidateElimination {
                 ArrayList<DataPoint> trainingPoints = data.getCrossFoldTrainingData(foldNumber);
                 ArrayList<Expression> testRules = generateTestRules(trainingPoints, possibleValues, numAttributes);
                 double accuracyOfCurrentRules = 100 * determineAccuracy(data.getCrossFoldTestData(foldNumber), testRules, verbose);
-                System.out.println("Accuracy " + MyTools.roundTo(accuracyOfCurrentRules, 2));
+                    System.out.println("Iteration: " + foldNumber + ", Accuracy: " + MyTools.roundTo(accuracyOfCurrentRules, 2));
                 if(verbose) {
-                    System.out.println("Expressions: " + testRules);
+                    System.out.println("Version space: " + testRules + "\n");
                 }
                 overallAccuracy += accuracyOfCurrentRules;
             }
@@ -134,9 +134,7 @@ public class CandidateElimination {
             }
 
         }
-        // combine the boundaries to get a complete list of expressions
-        generalBoundary.addAll(specificBoundary);
-        return generalBoundary;
+        return Expression.generateVersionSpace(specificBoundary, generalBoundary, possibleValues);
     }
 
     /**
@@ -593,5 +591,41 @@ class Expression {
         Expression.removeMoreSpecificExpressions(generalizedBoundary);
     }
 
+    public static ArrayList<Expression> generateVersionSpace(ArrayList<Expression> specificBoundary,
+                                                             ArrayList<Expression> generalBoundary,
+                                                             ArrayList<ArrayList<AttributeValue>> possibleValues) {
+        ArrayList<Expression> expressionQueue = new ArrayList<>(), versionSpace = new ArrayList<>();
+        // working from the general side to the specific side
+        versionSpace.addAll(specificBoundary);
+        expressionQueue.addAll(generalBoundary);
+        // work through each of the expressions, and examine all of the possible values for each wildcard
 
+        // for each attribute that is currently a wildcard, create expressions for each of the possible values of that attribute
+        while(!expressionQueue.isEmpty()) {
+            Expression currentExpression = expressionQueue.get(0);
+            expressionQueue.remove(0);
+            if(currentExpression.values == null) {
+                System.out.println("Encountered an error, found an expression with null for attributes: " + currentExpression.toString());
+                break;
+            }
+            // if we've already seen this expression, there's no reason to go any further
+            if(!versionSpace.contains(currentExpression)) {
+                // add this expression to the version space, and put all of its children that are general than at
+                // least one expression on the specific boundary on the queue
+                versionSpace.add(currentExpression);
+                for (int attIndex = 0; attIndex < possibleValues.size(); attIndex++) {
+                    // for each attribute that has a wildcard, look at each of it's possible values
+                    if(currentExpression.values[attIndex].isWildcard()) {
+                        for(AttributeValue possibleValue: possibleValues.get(attIndex)) {
+                            Expression childExpression = currentExpression.copyWithValueAtPosition(attIndex, possibleValue);
+                            if(childExpression.isMoreGeneralThanAtLeastOne(specificBoundary)) {
+                                expressionQueue.add(childExpression);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return versionSpace;
+    }
 }
