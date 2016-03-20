@@ -1,0 +1,63 @@
+Could you have something with fewer ?’s that isn’t more specific?
+To be more specific, you’ve got to be more specific or the same in every position
+<Sunny, ?, ?, Strong,      ?,        ?   >  has 4 ?’s
+<Sunny, ?, ?,    ?,        Warm, Same> has 3 ?’s but is not more specific because strong went from specific to more general (?)
+
+Training set
+100 - no
+010 - no
+001 - yes
+ 
+S = [<n,n,n>]
+G = [<?,?,?>]
+ 
+(1) 100 - no
+S
+==============
+100 is consistent with S so S remains [<n,n,n>]
+ 
+G 
+==============
+100 is inconsistent with <?,?,?> so remove it and add:
+[<0,?,?>,<?,1,?>,<?,?,1>]
+ 
+G = [<0,?,?>,<?,1,?>,<?,?,1>]
+ 
+(2) 010 - no
+S
+==============
+010 is consistent with S so S remains [<n,n,n>]
+ 
+G 
+==============
+010 is inconsistent with <0,?,?> so remove it and add:
+[<0,0,?>,<0,?,1>]
+ 
+010 is inconsistent with <?,1,?> so remove it and add:
+[<1,1,?>,<?,1,1>]
+ 
+010 is consistent with <?,?,1>
+ 
+Now G = [<0,0,?>,<0,?,1>,<1,1,?>,<?,1,1>,	<?,?,1>]
+
+But, we need to remove expressions that are more specific than any other in G so we get rid of the stuff we just added and:
+G = [<0,0,?>,<0,?,1>,<1,1,?>,<?,1,1>
+	<?,?,1>]
+Note that 00? Is not more specific than ??1 because the ? that replaces the 1 in the last position is not more specific than the 1
+
+(4) 001 - yes
+G
+==============
+001 is inconsistent with 11? so we get rid of it.
+G = [<0,0,?>,<0,?,1>,<1,1,?>,<?,1,1>
+	<?,?,1>]
+
+S ==============
+001 is inconsistent with <n,n,n> so remove it and add:
+[<0,0,1>]
+ 
+ 
+Result
+S = [<0,0,1>]
+G = [<0,0,?>, <?,?,1>]
+ 

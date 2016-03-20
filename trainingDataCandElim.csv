@@ -1,0 +1,1001 @@
+Sky,AirTemp,Humidity,Wind,Water,Forecast,class
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Cool,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Cloudy,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Weak,Cool,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,High,Weak,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Warm,Change,Do Not Enjoy
+Rainy,Cold,Normal,Strong,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Cool,Same,Do Not Enjoy
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Rainy,Cold,Normal,Weak,Cool,Change,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Weak,Warm,Change,Do Not Enjoy
+Rainy,Cold,High,Strong,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,High,Weak,Warm,Same,Do Not Enjoy
+Sunny,Warm,Normal,Weak,Warm,Same,Enjoy Sport
+Sunny,Warm,Normal,Weak,Warm,Change,Enjoy Sport
+Rainy,Cold,Normal,Strong,Warm,Same,Do Not Enjoy
