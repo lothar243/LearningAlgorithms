@@ -137,8 +137,38 @@ public class BayesNet {
         return output;
     }
 
-    public static Double functionToMaximize(int currentIndex, ArrayList<Integer> parentIndices) {
-        return null;
+    public static Double k2Function(Data data, ArrayList<ArrayList<AttributeValue>> possibleValues, int currentIndex, ArrayList<Integer> parentIndices) {
+        if(parentIndices.size() == 0) {
+            // special case when there are no parents
+            double result = 0;
+            for(AttributeValue possibleValue: possibleValues.get(currentIndex)) {
+                // todo take the factorial of each of the number of items with this value
+            }
+        }
+    }
+
+    public int numDataPointsWithCondition(ArrayList<DataPoint> dataPoints, int index, AttributeValue value) {
+        ArrayList<Integer> indices = new ArrayList<>();
+        indices.add(index);
+        ArrayList<AttributeValue> values = new ArrayList<>();
+        values.add(value);
+        return numDataPointsWithCondition(dataPoints, indices, values);
+    }
+    public int numDataPointsWithCondition(ArrayList<DataPoint> dataPoints, ArrayList<Integer> indices, ArrayList<AttributeValue> values) {
+        if(indices.size() != values.size()) {
+            System.out.println("Error in numDataPointsWithCondition - arrayLists must have the same size");
+        }
+        int count = 0;
+        for(DataPoint point: dataPoints) {
+            boolean match = true;
+            for(int i = 0; i < indices.size(); i++) {
+                match &= point.attributes[indices.get(i)].equals(values.get(i));
+            }
+            if(match) {
+                count++;
+            }
+        }
+        return count;
     }
 
     static class Sets {
