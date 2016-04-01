@@ -24,7 +24,26 @@ public class Data {
         Collections.shuffle(dataPoints);
     }
 
-    public ArrayList<DataPoint> getCrossFoldTestData(int foldNumber) {
+    public Data getCrossFoldTrainingData(int foldNumber) {
+        Data trainingData = new Data();
+        trainingData.numAttributes = this.numAttributes;
+        trainingData.attributeNames = Arrays.copyOf(attributeNames, attributeNames.length);
+        trainingData.classifications.addAll(classifications);
+        trainingData.addDataPoints(getCrossFoldTrainingDataPoints(foldNumber));
+        trainingData.determineExtremes();
+        return trainingData;
+    }
+    public Data getCrossFoldTestData(int foldNumber) {
+        Data testData = new Data();
+        testData.numAttributes = this.numAttributes;
+        testData.attributeNames = Arrays.copyOf(attributeNames, attributeNames.length);
+        testData.classifications.addAll(classifications);
+        testData.addDataPoints(getCrossFoldTestDataPoints(foldNumber));
+        testData.determineExtremes();
+        return testData;
+    }
+
+    public ArrayList<DataPoint> getCrossFoldTestDataPoints(int foldNumber) {
         ArrayList<DataPoint> testData = new ArrayList<>();
         if(foldNumber >= crossFoldNumFolds) return testData;
 
@@ -36,7 +55,7 @@ public class Data {
         return testData;
     }
 
-    public ArrayList<DataPoint> getCrossFoldTrainingData(int foldNumber) {
+    public ArrayList<DataPoint> getCrossFoldTrainingDataPoints(int foldNumber) {
         ArrayList<DataPoint> trainingData = new ArrayList<>();
         if(foldNumber >= crossFoldNumFolds) return trainingData;
 
@@ -71,6 +90,22 @@ public class Data {
         this.numAttributes = attributeNames.length - 1;
     }
 
+
+    private void addDataPoints(ArrayList<DataPoint> newDataPoints) {
+        classificationCounts = new ArrayList<>();
+        for (int i = 0; i < classifications.size(); i++) {
+            classificationCounts.add(0);
+        }
+        // requires classification indices to already be correct
+        for(DataPoint point: newDataPoints) {
+            dataPoints.add(point);
+            incrementClassificationCount(point.classificationIndex);
+        }
+    }
+    private void incrementClassificationCount(int index) {
+        classificationCounts.set(index, classificationCounts.get(index) + 1);
+    }
+
     /**
      * Introduce new dataPoints to the collection
      * @param dataPoint The point to be introduced
@@ -81,7 +116,7 @@ public class Data {
         for (int i = 0; i < classifications.size(); i++) {
             if(classifications.get(i).equals(classification)) {
                 // increment the number of times this category was encountered
-                classificationCounts.set(i, classificationCounts.get(i) + 1);
+                incrementClassificationCount(i);
                 dataPoint.classificationIndex = i;
                 categoryAlreadySeen = true;
             }

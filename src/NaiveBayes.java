@@ -20,7 +20,7 @@ public class NaiveBayes {
                 "\t\tspecify an m-Estimator (default 1000)\n" +
                 "\t-r\n" +
                 "\t\tRescale probabilities so more frequent observations aren't favored\n";
-        if(args.length < 2) {
+        if (args.length < 2) {
             System.out.println(helpString);
             System.exit(1);
         }
@@ -54,8 +54,7 @@ public class NaiveBayes {
                         System.exit(0);
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.toString());
             System.exit(0);
 
@@ -64,6 +63,17 @@ public class NaiveBayes {
         System.out.println("Using an m-Estimator of " + mEstimator);
         Data trainingData = new Data();
         FileIO.readFromFile(args[0], trainingData);
+
+        Data testData = new Data(trainingData.attributeNames, trainingData.classifications);
+        FileIO.readFromFile(args[1], testData);
+
+        for (int i = 0; i < trainingData.classifications.size(); i++) {
+            System.out.println(trainingData.classifications.get(i) + ": " + trainingData.classificationCounts.get(i) +
+                    ", " + testData.classifications.get(i) + ": " + testData.classificationCounts.get(i));
+        }
+        naiveBayes(trainingData, testData, numBins, verbose, rescaleData, mEstimator);
+    }
+    public static void naiveBayes(Data trainingData, Data testData, int numBins, boolean verbose, boolean rescaleData, double mEstimator) {
         trainingData.determineExtremes();
 
         BinInfo binInfo = new BinInfo(trainingData.minValues, trainingData.maxValues, numBins);
@@ -91,14 +101,6 @@ public class NaiveBayes {
             }
         }
 
-        // the bins are all set up, so now it's time to make some predictions about the test data
-        Data testData = new Data(trainingData.attributeNames, trainingData.classifications);
-        FileIO.readFromFile(args[1], testData);
-
-        for (int i = 0; i < trainingData.classifications.size(); i++) {
-            System.out.println(trainingData.classifications.get(i) + ": " + trainingData.classificationCounts.get(i) +
-                    ", " + testData.classifications.get(i) + ": " + testData.classificationCounts.get(i));
-        }
 
 
         int numPointsTested = 0;
@@ -198,7 +200,7 @@ public class NaiveBayes {
             int[][][] binCounts = new int[data.classifications.size()][numAttributes][numBins];
 
             // start by filling all of the bins with zeros
-            for (int classIndex = 0; classIndex < numAttributes; classIndex++) {
+            for (int classIndex = 0; classIndex < data.classifications.size(); classIndex++) {
                 for (int attIndex = 0; attIndex < data.numAttributes; attIndex++) {
                     Arrays.fill(binCounts[classIndex][attIndex], 0);
 

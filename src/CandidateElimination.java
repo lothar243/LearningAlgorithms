@@ -90,10 +90,10 @@ public class CandidateElimination {
             double overallAccuracy = 0;
             data.initializeDataForCrossFoldValidation(crossFoldNumFolds);
             for (int foldNumber = 0; foldNumber < crossFoldNumFolds; foldNumber++) {
-                ArrayList<DataPoint> trainingPoints = data.getCrossFoldTrainingData(foldNumber);
+                ArrayList<DataPoint> trainingPoints = data.getCrossFoldTrainingDataPoints(foldNumber);
                 ArrayList<Expression> testRules = generateTestRules(trainingPoints, possibleValues, numAttributes);
                 System.out.println("Iteration: " + foldNumber);
-                double accuracyOfCurrentRules = 100 * determineAccuracy(data.getCrossFoldTestData(foldNumber), testRules, verbose);
+                double accuracyOfCurrentRules = 100 * determineAccuracy(data.getCrossFoldTestDataPoints(foldNumber), testRules, verbose);
                 System.out.println("Accuracy: " + MyTools.roundTo(accuracyOfCurrentRules, 2));
                 if(verbose) {
                     System.out.println("Version space: " + testRules + "\n");
