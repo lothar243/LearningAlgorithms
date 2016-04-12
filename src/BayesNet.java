@@ -12,6 +12,7 @@ public class BayesNet {
         String positiveString = "1";
         boolean positiveStringSpecified = false;
         int maxParents = 2;
+        int numTriesPerFold = 10;
 
         // read in optional arguments
         try {
@@ -41,6 +42,11 @@ public class BayesNet {
                     case "-u":
                         maxParents = Integer.parseInt(args[argNum + 1]);
                         argNum++;
+                        break;
+                    case "-s":
+                        numTriesPerFold = Integer.parseInt(args[argNum + 1]);
+                        argNum++;
+                        break;
                     default:
                         System.out.println("Unknown argument encountered: " + args[argNum] + " - use -h for help");
                         System.exit(0);
@@ -61,12 +67,29 @@ public class BayesNet {
 //            System.out.println("Training data: " + trainingData.toString());
 //            System.out.println("Test data: " + testData.toString());
 
-            ArrayList<Integer> nodeOrdering = new ArrayList<>();
-            for (int j = 0; j < trainingData.numAttributes; j++) {
-                nodeOrdering.add(j);
+            ArrayList<ArrayList<Integer>> bestParentIndices = null;
+            double bestTreeScore = -Double.MAX_VALUE;
+
+            for (int orderNumber = 0; orderNumber < numTriesPerFold; orderNumber++) {
+                ArrayList<Integer> nodeOrdering = new ArrayList<>();
+                for (int j = 0; j < trainingData.numAttributes; j++) {
+                    nodeOrdering.add(j);
+                }
+                Collections.shuffle(nodeOrdering);
+                ArrayList<ArrayList<Integer>> parentIndicesList = k2Algorithm(trainingData.dataPoints, nodeOrdering, maxParents);
+                double currentTreeScore = scoreNetwork(trainingData.dataPoints, trainingData.inferPossibleAttributeValues(), parentIndicesList);
+                if(currentTreeScore > bestTreeScore) {
+                    bestTreeScore = currentTreeScore;
+                    bestParentIndices = parentIndicesList;
+                }
             }
-            Collections.shuffle(nodeOrdering);
-            ArrayList<ArrayList<Integer>> parentIndices = k2Algorithm(trainingData.dataPoints, nodeOrdering, maxParents);
+            if(verbose) {
+                System.out.println("fold " + i);
+                for (int j = 0; j < trainingData.numAttributes; j++) {
+                    System.out.println("Node " + j + ", parents: " + bestParentIndices.get(j).toString());
+                }
+                System.out.println("For a score of " + bestTreeScore);
+            }
         }
 //        ArrayList<DataPoint> dataPoints = FileIO.readRawPoints(trainingDataFile);
 //        int numAttributes = dataPoints.get(0).attributes.length - 1;
@@ -120,56 +143,11 @@ public class BayesNet {
                 }
             }
             parentIndicesList.set(currentIndex, parentIndices);
-            System.out.println("Node " + nodeOrdering.get(i) + ", parent(s): " + parentIndices.toString());
+//            System.out.println("Node " + nodeOrdering.get(i) + ", parent(s): " + parentIndices.toString());
         }
         return parentIndicesList;
     }
 
-    public static Double probability(Data data, int attributeIndex, AttributeValue value) {
-        return probability(data.dataPoints, attributeIndex, value);
-    }
-    public static Double probability(ArrayList<DataPoint> dataPoints, int attributeIndex, AttributeValue value) {
-        int count = 0;
-        for(DataPoint dataPoint: dataPoints) {
-            if(dataPoint.attributes[attributeIndex].equals(value)) {
-                count++;
-            }
-        }
-        return (double)count / dataPoints.size();
-    }
-
-    /**
-     * Calculate the conditional probability that an attribute has a value given other attributes having specific values
-     * @param data The training data
-     * @param attributeIndex The index of the unknown attribute
-     * @param value The value we're finding the probability of
-     * @param marginalIndices Indices of the attributes that are given
-     * @param marginalValues Values of the indices, this must be the same size as marginalIndices
-     * @return P(value at index is certain value given values at other indices are other specific values)
-     */
-    public static Double marginalProbability(Data data, int attributeIndex, AttributeValue value,
-                                      ArrayList<Integer> marginalIndices, ArrayList<AttributeValue> marginalValues) {
-        if(marginalIndices.size() != marginalValues.size()){
-            System.out.println("Error, mismatched ArrayLists in marginalProbability()");
-            return null;
-        }
-
-        // fetch the data points that satisfy the condition
-        ArrayList<DataPoint> slice = new ArrayList<>();
-        for(DataPoint point: data.dataPoints) {
-            boolean match = true;
-            for (int i = 0; i < marginalIndices.size(); i++) {
-                match &= (point.attributes[marginalIndices.get(i)].equals(marginalValues.get(i)));
-            }
-            if(match) {
-                slice.add(point);
-            }
-        }
-        if(slice.size() == 0) { // the condition is never met, so returning the non-marginal probability
-            return probability(data, attributeIndex, value);
-        }
-        return probability(slice, attributeIndex, value);
-    }
 
 
     /**
@@ -200,6 +178,15 @@ public class BayesNet {
         }
 //        System.out.println("logFact on " + num + " is " + output);
         return output;
+    }
+
+    public static Double scoreNetwork(ArrayList<DataPoint> dataPoints, ArrayList<ArrayList<AttributeValue>> possibleValues,
+                                      ArrayList<ArrayList<Integer>> parentIndicesList) {
+        double result = 1;
+        for (int i = 0; i < possibleValues.size(); i++) {
+            result += k2Formula(dataPoints, possibleValues, i, parentIndicesList.get(i));
+        }
+        return result;
     }
 
     public static Double k2Formula(ArrayList<DataPoint> dataPoints, ArrayList<ArrayList<AttributeValue>> possibleValues, int currentIndex, ArrayList<Integer> parentIndices) {

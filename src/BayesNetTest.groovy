@@ -4,15 +4,6 @@
 class BayesNetTest extends GroovyTestCase {
     static final double EPSILON = 0.0001d;
 
-    public void testProbability() {
-        Data data = createTestData();
-        assertEquals(1, BayesNet.marginalProbability(data, 0, new AttributeValue(1), createIntArrayList(1), createAttList(0)), EPSILON);
-        assertEquals(0.5, BayesNet.marginalProbability(data, 1, new AttributeValue(1), createIntArrayList(0), createAttList(1)), EPSILON);
-        assertEquals(1, BayesNet.marginalProbability(data, 1, new AttributeValue(1), createIntArrayList(0, 2), createAttList(1, 0)), EPSILON);
-        assertEquals(2/3, BayesNet.probability(data, 0, new AttributeValue(1)), EPSILON);
-        assertEquals(1/3, BayesNet.probability(data, 0, new AttributeValue(0)), EPSILON);
-        assertEquals(2/3, BayesNet.marginalProbability(data, 0, new AttributeValue(1), createIntArrayList(1, 2), createAttList(1, 1)), EPSILON);
-    }
 
     public Data createTestData() {
         DataPoint first = new DataPoint(createDoubleArray(1, 1, 0));
@@ -67,16 +58,16 @@ class BayesNetTest extends GroovyTestCase {
         Data data = new Data();
         String[] attributeNames = ["x_1", "x_2", "x_3", "class"]
         data.setAttributeNames(attributeNames);
-        data.addDataPoint(FileIO.parseAttributes("1 0 0 3".split()), "1");
-        data.addDataPoint(FileIO.parseAttributes("1 1 1 3".split()), "1");
-        data.addDataPoint(FileIO.parseAttributes("0 0 1 3".split()), "0");
-        data.addDataPoint(FileIO.parseAttributes("1 1 1 3".split()), "1");
-        data.addDataPoint(FileIO.parseAttributes("0 0 0 3".split()), "0");
-        data.addDataPoint(FileIO.parseAttributes("0 1 1 3".split()), "0");
-        data.addDataPoint(FileIO.parseAttributes("1 1 1 3".split()), "1");
-        data.addDataPoint(FileIO.parseAttributes("0 0 0 3".split()), "0");
-        data.addDataPoint(FileIO.parseAttributes("1 1 1 3".split()), "1");
-        data.addDataPoint(FileIO.parseAttributes("0 0 0 3".split()), "0");
+        data.addDataPoint(FileIO.parseAttributes("1 0 0 3".split(), 3), "1");
+        data.addDataPoint(FileIO.parseAttributes("1 1 1 3".split(), 3), "1");
+        data.addDataPoint(FileIO.parseAttributes("0 0 1 3".split(), 3), "0");
+        data.addDataPoint(FileIO.parseAttributes("1 1 1 3".split(), 3), "1");
+        data.addDataPoint(FileIO.parseAttributes("0 0 0 3".split(), 3), "0");
+        data.addDataPoint(FileIO.parseAttributes("0 1 1 3".split(), 3), "0");
+        data.addDataPoint(FileIO.parseAttributes("1 1 1 3".split(), 3), "1");
+        data.addDataPoint(FileIO.parseAttributes("0 0 0 3".split(), 3), "0");
+        data.addDataPoint(FileIO.parseAttributes("1 1 1 3".split(), 3), "1");
+        data.addDataPoint(FileIO.parseAttributes("0 0 0 3".split(), 3), "0");
 //        System.out.println(data.toString());
         return data;
     }
@@ -161,6 +152,6 @@ class BayesNetTest extends GroovyTestCase {
         nodeOrdering.add(1);
         nodeOrdering.add(2);
 
-        BayesNet.k2Algorithm(data, nodeOrdering, 2);
+        BayesNet.k2Algorithm(data.dataPoints, nodeOrdering, 2);
     }
 }
