@@ -1,6 +1,7 @@
 import com.opencsv.CSVReader;
 
 import java.io.FileReader;
+import java.util.ArrayList;
 
 /**
  * Read fruit data from file
@@ -33,7 +34,7 @@ public class FileIO {
                         System.out.println("Read a line with the wrong number of entries");
                         System.exit(0);
                     }
-                    data.addDataPoint(parseAttributes(line), line[line.length - 1]);
+                    data.addDataPoint(parseAttributes(line, line.length - 1), line[line.length - 1]);
                 }
 
             }
@@ -49,11 +50,44 @@ public class FileIO {
         return false;
     }
 
+    public static ArrayList<DataPoint> readRawPoints(String fileName) {
+        try {
+            CSVReader reader = new CSVReader(new FileReader(fileName));
+            // begin by reading in the attribute names
+            String [] attributeNames = reader.readNext();
 
-    private static DataPoint parseAttributes(String[] line) {
+            // now read the file in a line at a time and add the entry
+            String [] line;
+            ArrayList<DataPoint> dataPoints = new ArrayList<>();
+            // keep reading until we reach the end of the file
+            while((line = reader.readNext()) != null) {
+                // ignore blank lines
+                if(line.length != 0) {
+                    if(line.length != attributeNames.length) {
+                        System.out.println("Read a line with the wrong number of entries");
+                        System.exit(0);
+                    }
+                    dataPoints.add(parseAttributes(line, line.length));
+                }
+
+            }
+            return dataPoints;
+
+
+        }
+        catch (Exception e) {
+            System.out.println("Error reading file - " + fileName);
+            e.printStackTrace();
+        }
+        System.exit(0);
+        return null;
+    }
+
+
+    public static DataPoint parseAttributes(String[] line, int lastIndex) {
         // each of the arguments in the first n-1 columns is a Double
-        Object [] attributes = new Object[line.length - 1];
-        for (int i = 0; i < line.length - 1; i++) {
+        Object [] attributes = new Object[lastIndex];
+        for (int i = 0; i < lastIndex; i++) {
             try {
                 attributes[i] = Double.parseDouble(line[i]);
             }

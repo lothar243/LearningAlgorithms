@@ -48,6 +48,9 @@ class BayesNetTest extends GroovyTestCase {
         }
         return output;
     }
+    public DataPoint createDataPoint(Double[] args) {
+        return new DataPoint(createAttList(args))
+    }
     public Double createDouble(double a) {
         Double output = a;
         return output;
@@ -58,5 +61,106 @@ class BayesNetTest extends GroovyTestCase {
         assertEquals(Math.log(2), BayesNet.logFact(2), EPSILON);
         assertEquals(Math.log(6), BayesNet.logFact(3), EPSILON);
         assertEquals(Math.log(24), BayesNet.logFact(4), EPSILON);
+    }
+
+    public Data createK2TestData() {
+        Data data = new Data();
+        String[] attributeNames = ["x_1", "x_2", "x_3", "class"]
+        data.setAttributeNames(attributeNames);
+        data.addDataPoint(FileIO.parseAttributes("1 0 0 3".split()), "1");
+        data.addDataPoint(FileIO.parseAttributes("1 1 1 3".split()), "1");
+        data.addDataPoint(FileIO.parseAttributes("0 0 1 3".split()), "0");
+        data.addDataPoint(FileIO.parseAttributes("1 1 1 3".split()), "1");
+        data.addDataPoint(FileIO.parseAttributes("0 0 0 3".split()), "0");
+        data.addDataPoint(FileIO.parseAttributes("0 1 1 3".split()), "0");
+        data.addDataPoint(FileIO.parseAttributes("1 1 1 3".split()), "1");
+        data.addDataPoint(FileIO.parseAttributes("0 0 0 3".split()), "0");
+        data.addDataPoint(FileIO.parseAttributes("1 1 1 3".split()), "1");
+        data.addDataPoint(FileIO.parseAttributes("0 0 0 3".split()), "0");
+//        System.out.println(data.toString());
+        return data;
+    }
+    public void testK2Function() {
+        Data data = createK2TestData();
+
+        System.out.println("Test 1");
+        assertEquals(Math.log(1.0/2772),
+                BayesNet.k2Formula(
+                        data.dataPoints,
+                        data.inferPossibleAttributeValues(),
+                        0,
+                        new ArrayList<Integer>()),
+                EPSILON);
+        System.out.println("\nTest 2");
+        assertEquals(Math.log(1.0/2772),
+                BayesNet.k2Formula(
+                        data.dataPoints,
+                        data.inferPossibleAttributeValues(),
+                        1,
+                        new ArrayList<Integer>()),
+                EPSILON);
+        System.out.println("\nTest 3");
+        ArrayList<Integer> parentIndices = new ArrayList<>();
+        parentIndices.add(0);
+        assertEquals(Math.log(1.0/900),
+                BayesNet.k2Formula(
+                        data.dataPoints,
+                        data.inferPossibleAttributeValues(),
+                        1,
+                        parentIndices),
+                EPSILON);
+        System.out.println("\nTest 4");
+        assertEquals(Math.log(1.0/2310),
+                BayesNet.k2Formula(
+                        data.dataPoints,
+                        data.inferPossibleAttributeValues(),
+                        2,
+                        new ArrayList<Integer>()),
+                EPSILON);
+
+        System.out.println("\nTest 5");
+        parentIndices = new ArrayList<>();
+        parentIndices.add(0);
+        assertEquals(Math.log(1.0/1800),
+                BayesNet.k2Formula(
+                        data.dataPoints,
+                        data.inferPossibleAttributeValues(),
+                        2,
+                        parentIndices),
+                EPSILON);
+
+        System.out.println("\nTest 6");
+        parentIndices = new ArrayList<>();
+        parentIndices.add(1);
+        assertEquals(Math.log(1.0/180),
+                BayesNet.k2Formula(
+                        data.dataPoints,
+                        data.inferPossibleAttributeValues(),
+                        2,
+                        parentIndices),
+                EPSILON);
+
+        System.out.println("\nTest 7");
+        parentIndices = new ArrayList<>();
+        parentIndices.add(0);
+        parentIndices.add(1);
+        assertEquals(Math.log(1.0/400),
+                BayesNet.k2Formula(
+                        data.dataPoints,
+                        data.inferPossibleAttributeValues(),
+                        2,
+                        parentIndices),
+                EPSILON);
+
+    }
+
+    public void testK2Algorithm() {
+        Data data = createK2TestData();
+        ArrayList<Integer> nodeOrdering = new ArrayList<>();
+        nodeOrdering.add(0);
+        nodeOrdering.add(1);
+        nodeOrdering.add(2);
+
+        BayesNet.k2Algorithm(data, nodeOrdering, 2);
     }
 }

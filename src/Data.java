@@ -142,7 +142,11 @@ public class Data {
     }
 
     public ArrayList<ArrayList<AttributeValue>> inferPossibleAttributeValues() {
+        return inferPossibleAttributeValues(this.dataPoints);
+    }
+    public static ArrayList<ArrayList<AttributeValue>> inferPossibleAttributeValues(ArrayList<DataPoint> dataPoints) {
         ArrayList<ArrayList<AttributeValue>> possibleValues = new ArrayList<>();
+        int numAttributes = dataPoints.get(0).attributes.length;
         for (int i = 0; i < numAttributes; i++) {
             ArrayList<AttributeValue> currentAttributeValues = new ArrayList<>();
             for(DataPoint point: dataPoints) {
