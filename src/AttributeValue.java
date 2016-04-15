@@ -97,6 +97,10 @@ class AttributeValue {
                 ;
     }
 
+    public int getInt() {
+        return (int)(0 + getDouble());
+    }
+
     public Double getDouble() {
         if(value == null) return null;
         if (!this.isNumeric()) return null;

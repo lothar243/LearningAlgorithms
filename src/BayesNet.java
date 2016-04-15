@@ -83,24 +83,113 @@ public class BayesNet {
                     bestParentIndices = parentIndicesList;
                 }
             }
+            System.out.println("fold " + i);
+            int[][] confusionMatrix = new int[2][2];
+            double accuracy = determineAccuracy(trainingData, testData, bestParentIndices, confusionMatrix);
             if(verbose) {
-                System.out.println("fold " + i);
                 for (int j = 0; j < trainingData.numAttributes; j++) {
                     System.out.println("Node " + j + ", parents: " + bestParentIndices.get(j).toString());
                 }
                 System.out.println("For a score of " + bestTreeScore);
             }
+
         }
-//        ArrayList<DataPoint> dataPoints = FileIO.readRawPoints(trainingDataFile);
-//        int numAttributes = dataPoints.get(0).attributes.length - 1;
-//        ArrayList<Integer> ordering = new ArrayList<>();
-//        for (int i = 0; i < numAttributes; i++) {
-//            ordering.add(i);
-//        }
-////        Collections.shuffle(ordering);
-//        k2Algorithm(dataPoints, ordering, 2);
+    }
 
+    public static double determineAccuracy(Data trainingData, Data testData, ArrayList<ArrayList<Integer>> parentIndices, int[][] confusionMatrix) {
+        int numCorrectPredictions = 0;
+        for (int i = 0; i < confusionMatrix.length; i++) {
+            Arrays.fill(confusionMatrix[i], 0);
+        }
+        for(DataPoint point: testData.dataPoints) {
+            if(point.classificationIndex == predictClassification(trainingData, parentIndices, point)) {
+                numCorrectPredictions++;
+                confusionMatrix[point.classificationIndex][point.classificationIndex]++;
+            }
+            else {
+                confusionMatrix[point.classificationIndex][1-point.classificationIndex]++;
+            }
+        }
+        return (double)numCorrectPredictions / testData.dataPoints.size();
+    }
 
+    public static int predictClassification(Data trainingData, ArrayList<ArrayList<Integer>> parentIndicesList, DataPoint point) {
+        double[] classificationProbs = classificationProbs(trainingData, parentIndicesList, point);
+        double bestProb = 0;
+        int bestProbIndex = -1;
+        for (int i = 0; i < classificationProbs.length; i++) {
+            if(classificationProbs[i] > bestProb) {
+                bestProbIndex = i;
+                bestProb = classificationProbs[i];
+            }
+        }
+        return bestProbIndex;
+    }
+
+    public static double[] classificationProbs(Data trainingData, ArrayList<ArrayList<Integer>> parentIndicesList, DataPoint point) {
+//        System.out.println("dataPoints: " + trainingData.dataPoints.toString());
+//        System.out.println("num classes: " + trainingData.classifications.size());
+//        System.out.println("num attributes: " + trainingData.numAttributes);
+
+        int[][][] fullDataBinCounts = NaiveBayes.findBinCounts(trainingData.dataPoints, trainingData.classifications.size(), trainingData.numAttributes, 2);
+        int numClasses = trainingData.classifications.size();
+        // using an m-estimator that essentially is putting one data example in every bin
+        final int mEstimator = fullDataBinCounts.length * fullDataBinCounts[0].length * fullDataBinCounts[0][0].length;
+
+        double[] classificationProducts = new double[trainingData.classifications.size()];
+//        System.out.println("dimension sizes: " + fullDataBinCounts.length + " x " + fullDataBinCounts[0].length + " x " + fullDataBinCounts[0][0].length);
+        Arrays.fill(classificationProducts, 1.0);
+        // working through each of the dimensions, we will multiply the individual probabilities
+        for (int attNumber = 0; attNumber < trainingData.numAttributes; attNumber++) {
+            ArrayList<Integer> currentParents = parentIndicesList.get(attNumber);
+            if(currentParents.size() == 0) {
+                // the current dimension has no parents, so using the full data set
+                int currentPointAttributeBin = point.attributes[attNumber].getInt();
+                int totalBetweenAllClasses = 0;
+                for (int classIndex = 0; classIndex < numClasses; classIndex++) {
+                    totalBetweenAllClasses += fullDataBinCounts[classIndex][attNumber][currentPointAttributeBin];
+                }
+                for (int classIndex = 0; classIndex < numClasses; classIndex++) {
+//                    System.out.println("attNumber: " + attNumber + ", class: " + classIndex + ", Multiplying by " + (fullDataBinCounts[classIndex][attNumber][currentPointAttributeBin] + 1) +
+//                    " / " + (totalBetweenAllClasses + mEstimator));
+                    classificationProducts[classIndex] *=
+                            (double)(fullDataBinCounts[classIndex][attNumber][currentPointAttributeBin] + 1)
+                            / (totalBetweenAllClasses + mEstimator);
+                }
+            }
+            else {
+                // the current dimension has parents, so restricting the data set to only those items that match parental values
+                ArrayList<DataPoint> dataSlice = sliceDataToMatchParentValues(trainingData.dataPoints, currentParents, point);
+                int totalBetweenAllClasses = dataSlice.size();
+                int[] classCounts = new int[numClasses];
+                Arrays.fill(classCounts, 0);
+                for(DataPoint trainingPoint: dataSlice) {
+                    classCounts[trainingPoint.classificationIndex]++;
+                }
+                for (int classIndex = 0; classIndex < numClasses; classIndex++) {
+//                    System.out.println("attNumber: " + attNumber + ", class: " + classIndex + ", Multiplying by " + (classCounts[classIndex] + 1) +
+//                            " / " + (totalBetweenAllClasses + mEstimator));
+                    classificationProducts[classIndex] *= (double)(classCounts[classIndex] + 1) / (totalBetweenAllClasses + mEstimator);
+                }
+            }
+        }
+        return classificationProducts;
+    }
+
+    public static ArrayList<DataPoint> sliceDataToMatchParentValues(ArrayList<DataPoint> dataPoints, ArrayList<Integer> parentIndices, DataPoint matchingPoint) {
+        ArrayList<DataPoint> slice = new ArrayList<>();
+        for(DataPoint point: dataPoints) {
+            // keep data points in the training data that have parental values that match a given point
+            boolean match = true;
+            for(int i = 0; i < parentIndices.size(); i++) {
+                int currentIndex = parentIndices.get(i);
+                match &= point.attributes[currentIndex].equals(matchingPoint.attributes[currentIndex]);
+            }
+            if(match) {
+                slice.add(point);
+            }
+        }
+        return slice;
     }
 
     public static ArrayList<ArrayList<Integer>> k2Algorithm(ArrayList<DataPoint> dataPoints, ArrayList<Integer> nodeOrdering, int maxParents) {
@@ -242,9 +331,9 @@ public class BayesNet {
                 count++;
             }
         }
-//        System.out.println("numPointsWithCondition: " + count);
         return count;
     }
+
 
     static class Sets {
         /**

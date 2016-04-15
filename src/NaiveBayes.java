@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -132,8 +133,26 @@ public class NaiveBayes {
         System.out.println("Correct predictions: " + numPredictionsCorrect + " out of " + numPointsTested +
             " for an accuracy of " + ((double)numPredictionsCorrect/numPointsTested*100) + "%");
 
+
     }
 
+    public static int[][][] findBinCounts(ArrayList<DataPoint> dataPoints, int numClassifications, int numAttributes, int numBins) {
+        int[][][] binCounts = new int[numClassifications][numAttributes][numBins];
+
+        // fill the bins with zeros
+        for (int classIndex = 0; classIndex < numClassifications; classIndex++) {
+            for (int attIndex = 0; attIndex < numAttributes; attIndex++) {
+                Arrays.fill(binCounts[classIndex][attIndex], 0);
+            }
+        }
+        // add increment the appropriate bin for each data point
+        for(DataPoint dataPoint: dataPoints) {
+            for(int attIndex = 0; attIndex < numAttributes; attIndex++) {
+                binCounts[dataPoint.classificationIndex][attIndex][(int)(0 + dataPoint.attributes[attIndex].getDouble())]++;
+            }
+        }
+        return binCounts;
+    }
 
 
 
@@ -217,6 +236,7 @@ public class NaiveBayes {
             }
             return binCounts;
         }
+
 
         /**
          * Predict the class of test point after training
