@@ -128,6 +128,38 @@ public class Data {
             dataPoint.classificationIndex = classifications.size() - 1;
         }
     }
+    public void addDataPoint(DataPoint dataPoint) {
+        dataPoints.add(dataPoint);
+        incrementClassificationCount(dataPoint.classificationIndex);
+    }
+
+    public void bootstrapToBalanceClasses() {
+//        System.out.println("DataPoints before balancing: " + dataPoints.size());
+        int numClasses = classifications.size();
+        int maxClassCount = 0;
+        // determine the number of items to increase to
+        for (int classIndex = 0; classIndex < numClasses; classIndex++) {
+            if(classificationCounts.get(classIndex) > maxClassCount)
+                maxClassCount = classificationCounts.get(classIndex);
+        }
+        for (int classIndex = 0; classIndex < numClasses; classIndex++) {
+            if(classificationCounts.get(classIndex) < maxClassCount) {
+                // add items until there are enough points in the class to match the biggest
+                ArrayList<DataPoint> listOfPointsToAdd = new ArrayList<>();
+                // first creating a list of existing points, so they can be duplicated
+                for(DataPoint point: dataPoints) {
+                    if(point.classificationIndex == classIndex) {
+                        listOfPointsToAdd.add(point.copyOf());
+                    }
+                }
+                Collections.shuffle(listOfPointsToAdd);
+                for (int i = 0; classificationCounts.get(classIndex) < maxClassCount; i++, i = i % listOfPointsToAdd.size()) {
+                    addDataPoint(listOfPointsToAdd.get(i));
+                }
+            }
+        }
+//        System.out.println("DataPoints after balancing: " + dataPoints.size() + " - " + maxClassCount + " datapoints per class");
+    }
 
     public String toString() {
         String output = attributeNames[0];

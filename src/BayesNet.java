@@ -11,8 +11,10 @@ public class BayesNet {
         int crossFoldNumFolds = -1;
         String positiveString = "1";
         boolean positiveStringSpecified = false;
+        boolean shuffleAttributeOrder = false;
         int maxParents = 2;
         int numTriesPerFold = 10;
+        boolean balanceClasses = false;
 
         // read in optional arguments
         try {
@@ -26,6 +28,9 @@ public class BayesNet {
                     case "-T":
                         testDataFile = args[argNum + 1];
                         argNum++;
+                        break;
+                    case "-S":
+                        shuffleAttributeOrder = true;
                         break;
                     case "-v":
                     case "--verbose":
@@ -43,9 +48,15 @@ public class BayesNet {
                         maxParents = Integer.parseInt(args[argNum + 1]);
                         argNum++;
                         break;
+                    case "-balance":
+                        balanceClasses = true;
+                        break;
                     case "-s":
                         numTriesPerFold = Integer.parseInt(args[argNum + 1]);
                         argNum++;
+                        break;
+                    case "-p":
+                        positiveString = args[argNum];
                         break;
                     default:
                         System.out.println("Unknown argument encountered: " + args[argNum] + " - use -h for help");
@@ -58,10 +69,13 @@ public class BayesNet {
         }
 
         Data data = new Data();
+        data.initializeForBinaryData(positiveString);
         FileIO.readFromFile(trainingDataFile, data);
+        if(balanceClasses) data.bootstrapToBalanceClasses();
 
-        data.initializeDataForCrossFoldValidation(10);
-        for (int i = 0; i < 10; i++) {
+        data.initializeDataForCrossFoldValidation(crossFoldNumFolds);
+        double averageAccuracy = 0;
+        for (int i = 0; i < crossFoldNumFolds; i++) {
             Data trainingData = data.getCrossFoldTrainingData(i);
             Data testData = data.getCrossFoldTestData(i);
 //            System.out.println("Training data: " + trainingData.toString());
@@ -70,18 +84,28 @@ public class BayesNet {
             ArrayList<ArrayList<Integer>> bestParentIndices = null;
             double bestTreeScore = -Double.MAX_VALUE;
 
-            for (int orderNumber = 0; orderNumber < numTriesPerFold; orderNumber++) {
+            if(shuffleAttributeOrder) {
+                for (int orderNumber = 0; orderNumber < numTriesPerFold; orderNumber++) {
+                    ArrayList<Integer> nodeOrdering = new ArrayList<>();
+                    for (int j = 0; j < trainingData.numAttributes; j++) {
+                        nodeOrdering.add(j);
+                    }
+                    Collections.shuffle(nodeOrdering);
+                    ArrayList<ArrayList<Integer>> parentIndicesList = k2Algorithm(trainingData.dataPoints, nodeOrdering, maxParents);
+                    double currentTreeScore = scoreNetwork(trainingData.dataPoints, trainingData.inferPossibleAttributeValues(), parentIndicesList);
+                    if (currentTreeScore > bestTreeScore) {
+                        bestTreeScore = currentTreeScore;
+                        bestParentIndices = parentIndicesList;
+                    }
+                }
+            }
+            else {
                 ArrayList<Integer> nodeOrdering = new ArrayList<>();
                 for (int j = 0; j < trainingData.numAttributes; j++) {
                     nodeOrdering.add(j);
                 }
-                Collections.shuffle(nodeOrdering);
-                ArrayList<ArrayList<Integer>> parentIndicesList = k2Algorithm(trainingData.dataPoints, nodeOrdering, maxParents);
-                double currentTreeScore = scoreNetwork(trainingData.dataPoints, trainingData.inferPossibleAttributeValues(), parentIndicesList);
-                if(currentTreeScore > bestTreeScore) {
-                    bestTreeScore = currentTreeScore;
-                    bestParentIndices = parentIndicesList;
-                }
+                bestParentIndices = k2Algorithm(trainingData.dataPoints, nodeOrdering, maxParents);
+                bestTreeScore = scoreNetwork(trainingData.dataPoints, trainingData.inferPossibleAttributeValues(), bestParentIndices);
             }
             System.out.println("fold " + i);
             int[][] confusionMatrix = new int[2][2];
@@ -90,11 +114,32 @@ public class BayesNet {
                 for (int j = 0; j < trainingData.numAttributes; j++) {
                     System.out.println("Node " + j + ", parents: " + bestParentIndices.get(j).toString());
                 }
-                System.out.println("For a score of " + bestTreeScore);
+//                System.out.println("For a score of " + bestTreeScore);
+                System.out.println("Confusion matrix: \n" + confusionMatrixString(trainingData, confusionMatrix) + "\n");
             }
-
+            averageAccuracy += accuracy;
+            System.out.println("Accuracy: " + accuracy);
         }
+
+        System.out.println("The overall average accuracy is " + (averageAccuracy / crossFoldNumFolds));
     }
+
+    private static String confusionMatrixString(Data data, int[][] confusionMatrix) {
+        String output = "\t\tPredicted\n";
+        int numClassifications = data.classifications.size();
+        for (int row = 0; row < numClassifications; row++) {
+            if(row == 0)
+                output += "Actual";
+            else
+                output += "\t";
+            for(int col = 0; col < numClassifications; col++) {
+                output += "\t" + confusionMatrix[row][col];
+            }
+            output += "\n";
+        }
+        return output;
+    }
+
 
     public static double determineAccuracy(Data trainingData, Data testData, ArrayList<ArrayList<Integer>> parentIndices, int[][] confusionMatrix) {
         int numCorrectPredictions = 0;
