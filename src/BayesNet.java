@@ -1,14 +1,14 @@
 import java.util.*;
 
 /**
- * Created by jeff on 3/22/16.
+ * Uses the K2 algorithm to determine a Bayesian network structure, then uses that structure to predict point classifications
  */
 public class BayesNet {
     /**
      * Print some output to help guide the user on the correct use of the command line arguments
      */
     public static void printHelpString() {
-        final String helpString = "\nUsage: ./BayesNet.sh -t trainingData.csv <optional arguments> -x NUMFOLDS\n\n" +
+        final String helpString = "\nUsage: ./BayesNet.sh -t trainingData.csv -x NUMFOLDS <optional arguments>\n\n" +
                 "Bayesian Network Implementation: Uses the K2 Algorithm" +
                 "Optional Arguments: \n" +
                 "\t-x NUM\n" +
@@ -16,7 +16,7 @@ public class BayesNet {
                 "\t-u NUM\n" +
                 "\t\tUpper bound on number of parents per node (default 2)\n" +
                 "\t-v\n" +
-                "\t\tVerbose - show expressions\n" +
+                "\t\tVerbose - show information of each fold\n" +
                 "\t-s NUM\n" +
                 "\t\tShuffle the ordering of the attributes to find the best tree structure (best of NUM orderings)\n" +
                 "\t-balance\n" +
