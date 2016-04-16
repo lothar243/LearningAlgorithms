@@ -4,12 +4,35 @@ import java.util.*;
  * Created by jeff on 3/22/16.
  */
 public class BayesNet {
+    /**
+     * Print some output to help guide the user on the correct use of the command line arguments
+     */
+    public static void printHelpString() {
+        final String helpString = "\nUsage: ./BayesNet.sh -t trainingData.csv <optional arguments> -x NUMFOLDS\n\n" +
+                "Bayesian Network Implementation: Uses the K2 Algorithm" +
+                "Optional Arguments: \n" +
+                "\t-x NUM\n" +
+                "\t\tn-fold cross validation\n" +
+                "\t-u NUM\n" +
+                "\t\tUpper bound on number of parents per node (default 2)\n" +
+                "\t-v\n" +
+                "\t\tVerbose - show expressions\n" +
+                "\t-s NUM\n" +
+                "\t\tShuffle the ordering of the attributes to find the best tree structure (best of NUM orderings)\n" +
+                "\t-balance\n" +
+                "\t\tDuplicate existing data points so that all classifications are equally likely\n";
+
+        System.out.println(helpString);
+        System.exit(1);
+
+    }
+
+
     public static void main(String[] args) {
         boolean verbose = false;
         String trainingDataFile = null;
-        String testDataFile = null;
         int crossFoldNumFolds = -1;
-        String positiveString = "1";
+        String positiveString = "0"; // using 0 as a positive so the values correspond to the indices
         boolean positiveStringSpecified = false;
         boolean shuffleAttributeOrder = false;
         int maxParents = 2;
@@ -24,13 +47,6 @@ public class BayesNet {
                         trainingDataFile = args[argNum + 1];
                         System.out.println("Using training data file: " + trainingDataFile);
                         argNum++;
-                        break;
-                    case "-T":
-                        testDataFile = args[argNum + 1];
-                        argNum++;
-                        break;
-                    case "-S":
-                        shuffleAttributeOrder = true;
                         break;
                     case "-v":
                     case "--verbose":
@@ -52,11 +68,13 @@ public class BayesNet {
                         balanceClasses = true;
                         break;
                     case "-s":
+                        shuffleAttributeOrder = true;
                         numTriesPerFold = Integer.parseInt(args[argNum + 1]);
                         argNum++;
                         break;
                     case "-p":
                         positiveString = args[argNum];
+                        positiveStringSpecified = true;
                         break;
                     default:
                         System.out.println("Unknown argument encountered: " + args[argNum] + " - use -h for help");
@@ -65,8 +83,10 @@ public class BayesNet {
             }
         } catch (Exception e) {
             System.out.println(e.toString());
+            printHelpString();
             System.exit(0);
         }
+
 
         Data data = new Data();
         data.initializeForBinaryData(positiveString);
@@ -115,7 +135,7 @@ public class BayesNet {
                     System.out.println("Node " + j + ", parents: " + bestParentIndices.get(j).toString());
                 }
 //                System.out.println("For a score of " + bestTreeScore);
-                System.out.println("Confusion matrix: \n" + confusionMatrixString(trainingData, confusionMatrix) + "\n");
+                System.out.println("Confusion matrix: \n" + confusionMatrixString(trainingData.classifications, confusionMatrix) + "\n");
             }
             averageAccuracy += accuracy;
             System.out.println("Accuracy: " + accuracy);
@@ -124,14 +144,38 @@ public class BayesNet {
         System.out.println("The overall average accuracy is " + (averageAccuracy / crossFoldNumFolds));
     }
 
-    private static String confusionMatrixString(Data data, int[][] confusionMatrix) {
-        String output = "\t\tPredicted\n";
-        int numClassifications = data.classifications.size();
+    /**
+     * Create a string make the confusion matrix human readable
+     * @param classLabels used for column and row titles
+     * @param confusionMatrix the matrix of values to be shown
+     * @return a human readable string
+     */
+    private static String confusionMatrixString(ArrayList<String> classLabels, int[][] confusionMatrix) {
+        /**
+         * Example output:
+         *  t    t    t    t    t    t (tab locations)
+         * "               Predicted
+         * "               "0"  "1"
+         * "Actual    "0"  48   2
+         * "          "1"  1    49
+         */
+
+
+
+        String output = "\t\t\tPredicted\n";
+        int numClassifications = classLabels.size();
+        output += "\t\t";
+        // row headers
+        for (int i = 0; i < numClassifications; i++) {
+            output += "\t\"" + classLabels.get(i) + "\"";
+        }
+        output += "\n";
         for (int row = 0; row < numClassifications; row++) {
             if(row == 0)
-                output += "Actual";
+                output += "Actual\t";
             else
-                output += "\t";
+                output += "\t\t";
+            output += "\"" + classLabels.get(row) + "\"";
             for(int col = 0; col < numClassifications; col++) {
                 output += "\t" + confusionMatrix[row][col];
             }
@@ -140,7 +184,14 @@ public class BayesNet {
         return output;
     }
 
-
+    /**
+     * Runs through the test data making predictions and testing to see how accurate those predictions are
+     * @param trainingData Data to gather the bayesian probabilities from
+     * @param testData Data to make predictions about
+     * @param parentIndices Immediate parents of attributes, indicating tree structure
+     * @param confusionMatrix A blank matrix to be edited so that it contains info on true/false class predictions
+     * @return The number of correct predictions divided by the total number of predictions
+     */
     public static double determineAccuracy(Data trainingData, Data testData, ArrayList<ArrayList<Integer>> parentIndices, int[][] confusionMatrix) {
         int numCorrectPredictions = 0;
         for (int i = 0; i < confusionMatrix.length; i++) {
@@ -158,6 +209,13 @@ public class BayesNet {
         return (double)numCorrectPredictions / testData.dataPoints.size();
     }
 
+    /**
+     * Predict the classification of a given point
+     * @param trainingData Data to draw the probabilities from
+     * @param parentIndicesList Immediate parents, indicates tree structure
+     * @param point The point whose classification is being predicted
+     * @return The index of the most likely classification
+     */
     public static int predictClassification(Data trainingData, ArrayList<ArrayList<Integer>> parentIndicesList, DataPoint point) {
         double[] classificationProbs = classificationProbs(trainingData, parentIndicesList, point);
         double bestProb = 0;
@@ -171,6 +229,13 @@ public class BayesNet {
         return bestProbIndex;
     }
 
+    /**
+     * Find the probabilities (before normalization) of the point being in each classification
+     * @param trainingData Data to draw the probabilities from
+     * @param parentIndicesList Immediate parents, indicates tree structure
+     * @param point The point whose classification is being predicted
+     * @return The probability of the point being each of classes (before normalization, so they don't sum to 1)
+     */
     public static double[] classificationProbs(Data trainingData, ArrayList<ArrayList<Integer>> parentIndicesList, DataPoint point) {
 //        System.out.println("dataPoints: " + trainingData.dataPoints.toString());
 //        System.out.println("num classes: " + trainingData.classifications.size());
@@ -221,6 +286,13 @@ public class BayesNet {
         return classificationProducts;
     }
 
+    /**
+     * Cut out any data points that don't have the correct values for the parents of the current attribute
+     * @param dataPoints the data points of the original training data
+     * @param parentIndices the indices of the parents of the current attribute in the bayesian network
+     * @param matchingPoint the point that has the attributes that must be matched to
+     * @return the data points that match on all the parental values
+     */
     public static ArrayList<DataPoint> sliceDataToMatchParentValues(ArrayList<DataPoint> dataPoints, ArrayList<Integer> parentIndices, DataPoint matchingPoint) {
         ArrayList<DataPoint> slice = new ArrayList<>();
         for(DataPoint point: dataPoints) {
@@ -237,6 +309,13 @@ public class BayesNet {
         return slice;
     }
 
+    /**
+     * determine the most likely bayesian network tree structure of a particular ordering by using the k2 algorithm
+     * @param dataPoints training data
+     * @param nodeOrdering the ordering being used
+     * @param maxParents the maximum number of allowed parents for each node
+     * @return immediate parents of each of the nodes
+     */
     public static ArrayList<ArrayList<Integer>> k2Algorithm(ArrayList<DataPoint> dataPoints, ArrayList<Integer> nodeOrdering, int maxParents) {
         ArrayList<ArrayList<AttributeValue>> possibleValues = Data.inferPossibleAttributeValues(dataPoints);
         ArrayList<ArrayList<Integer>> parentIndicesList = new ArrayList<>();
@@ -282,29 +361,11 @@ public class BayesNet {
         return parentIndicesList;
     }
 
-
-
     /**
-     * Print some output to help guide the user on the correct use of the command line arguments
+     * find the natural log of the factorial of a number
+     * @param num the number
+     * @return ln(num!)
      */
-    public static void printHelpString() {
-        final String helpString = "\nUsage: ./BayesNet.sh -t trainingData.csv <optional arguments>\n\n" +
-                "Bayesian Network Implementation: Uses the K2 Algorithm" +
-                "Optional Arguments: \n" +
-                "\t-T testData.csv\n" +
-                "\t\tSpecify which data to use as a test set\n" +
-                "\t-x NUM\n" +
-                "\t\tn-fold cross validation\n" +
-                "\t-u NUM\n" +
-                "\t\tUpper bound on number of parents per node (default 2)\n" +
-                "\t-v\n" +
-                "\t\tVerbose - show expressions";
-
-        System.out.println(helpString);
-        System.exit(1);
-
-    }
-
     public static Double logFact(int num) {
         Double output = 0.0;
         while(num > 0) {
@@ -314,6 +375,13 @@ public class BayesNet {
         return output;
     }
 
+    /**
+     * find the score of a given bayesian network structure, using logFact
+     * @param dataPoints the training data
+     * @param possibleValues a list of all possible values for each of the attributes
+     * @param parentIndicesList indices of immediate parents for each of the attributes, indicating the tree structure
+     * @return the natural log of the prob that this is the correct tree structure (non normalized)
+     */
     public static Double scoreNetwork(ArrayList<DataPoint> dataPoints, ArrayList<ArrayList<AttributeValue>> possibleValues,
                                       ArrayList<ArrayList<Integer>> parentIndicesList) {
         double result = 1;
@@ -323,6 +391,14 @@ public class BayesNet {
         return result;
     }
 
+    /**
+     * Calculate the value of the 'g' function used in the k2 algorithm
+     * @param dataPoints the training data
+     * @param possibleValues a list of all possible values of each attribute
+     * @param currentIndex the index being evaluated - 'i' in the k2 algorithm
+     * @param parentIndices the indices of the current parental instantiation
+     * @return the value of the current parental instantiation
+     */
     public static Double k2Formula(ArrayList<DataPoint> dataPoints, ArrayList<ArrayList<AttributeValue>> possibleValues, int currentIndex, ArrayList<Integer> parentIndices) {
         Set<ArrayList<AttributeValue>> phi_i = Sets.cartesianProduct(Sets.generateSets(possibleValues, parentIndices));
         ArrayList<AttributeValue> V_i = possibleValues.get(currentIndex);
@@ -343,6 +419,15 @@ public class BayesNet {
         return result;
     }
 
+    /**
+     * Determine the number of data points with certain values in certain positions
+     * @param dataPoints the list of datapoints
+     * @param attributeIndex a particular attribute to match
+     * @param attributeValue the value to be matched of that attribute
+     * @param parentIndices more indices of attributes to match
+     * @param parentValues
+     * @return
+     */
     public static int numDataPointsWithCondition(ArrayList<DataPoint> dataPoints, int attributeIndex, AttributeValue attributeValue,
                                                  ArrayList<Integer> parentIndices, ArrayList<AttributeValue> parentValues) {
         if(parentIndices.size() != parentValues.size()) {
@@ -382,7 +467,7 @@ public class BayesNet {
 
     static class Sets {
         /**
-         *
+         * Find all possible combinations of elements (one from each set with order maintained)
          * @param mySets an arrayList of sets
          * @return the cartesian product of the given sets where each result is an arrayList
          */
