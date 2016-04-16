@@ -162,9 +162,9 @@ public class BayesNet {
 
 
 
-        String output = "\t\t\tPredicted\n";
+        String output = "      \t\tPredicted\n";
         int numClassifications = classLabels.size();
-        output += "\t\t";
+        output += "      \t";
         // row headers
         for (int i = 0; i < numClassifications; i++) {
             output += "\t\"" + classLabels.get(i) + "\"";
@@ -174,7 +174,7 @@ public class BayesNet {
             if(row == 0)
                 output += "Actual\t";
             else
-                output += "\t\t";
+                output += "      \t";
             output += "\"" + classLabels.get(row) + "\"";
             for(int col = 0; col < numClassifications; col++) {
                 output += "\t" + confusionMatrix[row][col];
