@@ -73,4 +73,45 @@ public class MyTools {
         double powerOfTen = Math.pow(10, places);
         return Math.round(num * powerOfTen) / powerOfTen;
     }
+
+
+    /**
+     * Create a string make the confusion matrix human readable
+     * @param classLabels used for column and row titles
+     * @param confusionMatrix the matrix of values to be shown
+     * @return a human readable string
+     */
+    public static String confusionMatrixString(ArrayList<String> classLabels, int[][] confusionMatrix) {
+        /**
+         * Example output:
+         *  t    t    t    t    t    t (tab locations)
+         * "               Predicted
+         * "               "0"  "1"
+         * "Actual    "0"  48   2
+         * "          "1"  1    49
+         */
+
+
+
+        String output = "      \t\tPredicted\n";
+        int numClassifications = classLabels.size();
+        output += "      \t";
+        // row headers
+        for (int i = 0; i < numClassifications; i++) {
+            output += "\t\"" + classLabels.get(i) + "\"";
+        }
+        output += "\n";
+        for (int row = 0; row < numClassifications; row++) {
+            if(row == 0)
+                output += "Actual\t";
+            else
+                output += "      \t";
+            output += "\"" + classLabels.get(row) + "\"";
+            for(int col = 0; col < numClassifications; col++) {
+                output += "\t" + confusionMatrix[row][col];
+            }
+            output += "\n";
+        }
+        return output;
+    }
 }
