@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A class to hold some common functions
@@ -45,6 +46,14 @@ public class MyTools {
         }
         return output;
     }
+    public static String arrayToString(double[][] objects) {
+        if(objects == null || objects.length == 0) return "empty";
+        String output = Arrays.toString(objects[0]);
+        for (int i = 1; i < objects.length; i++) {
+            output += ",\n" + Arrays.toString(objects[i]);
+        }
+        return output;
+    }
 
     public static String leftPad(String string, int targetSize) {
         if(string == null) {
@@ -63,6 +72,7 @@ public class MyTools {
         }
         return duplicate;
     }
+
 
     public static void incrementAtIndex(ArrayList<Integer> list, int index) {
         list.set(index, list.get(index) + 1);

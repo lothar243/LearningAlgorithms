@@ -285,11 +285,8 @@ public class NeuralNet {
         for(layerIndex = nodes.length - 2; layerIndex >= 0; layerIndex--) {
             numNodesInLayer = nodes[layerIndex].length;
             upstreamErrors = new double[numNodesInLayer][];
-//            System.out.println("Errors: ");
             for (int nodeIndex = 0; nodeIndex < numNodesInLayer; nodeIndex++) {
-//                System.out.println("layer " + layerIndex + " node " + nodeIndex);
                 upstreamErrors[nodeIndex] = nodes[layerIndex][nodeIndex].calcLastError(downstreamErrors, nodeIndex);
-//                System.out.println(Arrays.toString(upstreamErrors[nodeIndex]));
             }
             downstreamErrors = upstreamErrors;
         }
@@ -299,7 +296,6 @@ public class NeuralNet {
             }
         }
     }
-
 
 
 }

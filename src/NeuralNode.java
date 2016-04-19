@@ -35,7 +35,7 @@ public class NeuralNode {
     }
 
     public String toString() {
-        return Arrays.toString(inputWeights);
+        return "Node - " + numInputs + " inputs: " + Arrays.toString(inputWeights);
     }
 
     public double[] calcLastError(double target) {
@@ -47,9 +47,8 @@ public class NeuralNode {
         // used for non-output nodes, the propagated errors must already have been multiplied by the edge weights
 //        System.out.println("Current weights " + Arrays.toString(inputWeights));
         lastError = 0;
-        for (int inputIndex = 0; inputIndex < numInputs - 1; inputIndex++) {
-//            System.out.println("inputIndex " + inputIndex + " currentNodeIndex " + currentNodeIndex);
-            lastError += propagatedErrors[inputIndex][currentNodeIndex];
+        for (int errorIndex = 0; errorIndex < propagatedErrors.length; errorIndex++) {
+            lastError += propagatedErrors[errorIndex][currentNodeIndex];
         }
         lastError *= lastOutput * (1 - lastOutput);
         return propagatedErrors();
