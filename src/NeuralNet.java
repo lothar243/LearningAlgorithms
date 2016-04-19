@@ -45,8 +45,7 @@ public class NeuralNet {
         layerStructure.add(3);
         long seed = 0;
         boolean seedSpecified = false;
-        boolean binsSpecified = false;
-        int numBins = -1;
+        double learningRate = .05;
 
         // read in optional arguments
         try {
@@ -64,10 +63,6 @@ public class NeuralNet {
                         seed = Long.parseLong(args[++argNum]);
                         seedSpecified = true;
                         break;
-                    case "-bins":
-                        binsSpecified = true;
-                        numBins = Integer.parseInt(args[++argNum]);
-                        break;
                     case "-v":
                     case "--verbose":
                         verbose = true;
@@ -80,6 +75,9 @@ public class NeuralNet {
                         break;
                     case "-e":
                         numEpochs = Integer.parseInt(args[++argNum]);
+                        break;
+                    case "-rate":
+                        learningRate = Double.parseDouble(args[++argNum]);
                         break;
                     case "-l":
                         layerStructure = new ArrayList<>();
@@ -144,7 +142,7 @@ public class NeuralNet {
             double overallAccuracy = 0;
             for (int foldNumber = 0; foldNumber < crossFoldNumFolds; foldNumber++) {
                 NeuralNet net = createNeuralNet(layerStructure, generator);
-                net.learningRate = .05;
+                net.learningRate = learningRate;
                 if(verbose) {
                     System.out.println("Fold " + foldNumber + ", Beginning neural net structure:\n" + net.toString());
                 }
