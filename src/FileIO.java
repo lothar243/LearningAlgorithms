@@ -1,7 +1,10 @@
 import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Read fruit data from file
@@ -97,6 +100,19 @@ public class FileIO {
         }
         // the entry in the last column is the classification, so pass it into the constructor
         return new DataPoint(attributes);
+    }
+
+    public static void writeToFile(String filename, String[] headers, List<String[]> values) {
+        try {
+            CSVWriter writer = new CSVWriter(new FileWriter(filename));
+            // begin by writing the headers
+            writer.writeNext(headers);
+            writer.writeAll(values);
+            writer.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

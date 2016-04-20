@@ -46,6 +46,7 @@ public class NeuralNet {
         long seed = 0;
         boolean seedSpecified = false;
         double learningRate = .05;
+        int numEpochsPerUpdate = 100;
 
         // read in optional arguments
         try {
@@ -80,11 +81,13 @@ public class NeuralNet {
                         learningRate = Double.parseDouble(args[++argNum]);
                         break;
                     case "-l":
-                        layerStructure = new ArrayList<>();
                         String[] layerStrings = args[++argNum].split(" ");
                         for(String layerString:layerStrings) {
                             layerStructure.add(Integer.parseInt(layerString));
                         }
+                        break;
+                    case "-updateSize":
+                        numEpochsPerUpdate = Integer.parseInt(args[++argNum]);
                         break;
                     case "-h":
                     case "-help":
@@ -134,6 +137,7 @@ public class NeuralNet {
             generator = new Random();
         }
 
+        ArrayList<String[]> accuracyOutput = new ArrayList<>();
 
         int numClassifications = data.classifications.size();
 
@@ -142,34 +146,59 @@ public class NeuralNet {
             double overallAccuracy = 0;
             for (int foldNumber = 0; foldNumber < crossFoldNumFolds; foldNumber++) {
                 NeuralNet net = createNeuralNet(layerStructure, generator);
-                net.learningRate = learningRate;
                 if(verbose) {
                     System.out.println("Fold " + foldNumber + ", Beginning neural net structure:\n" + net.toString());
                 }
+                net.learningRate = learningRate;
                 Data trainingData = data.getCrossFoldTrainingData(foldNumber);
                 Data testData = data.getCrossFoldTestData(foldNumber);
-                for (int i = 0; i < numEpochs; i++) {
-                    if(i % 100 == 0) {
-                        int[][] confusionMatrix = new int[numClassifications][numClassifications];
-                        double accuracy = determineAccuracy(testData, net, confusionMatrix);
-                        if(verbose) System.out.println("Epoch " + i + ": accuracy " + accuracy);
-                    }
-                    runEpoch(trainingData, net);
-                }
-                int[][] confusionMatrix = new int[numClassifications][numClassifications];
-                double accuracy = determineAccuracy(testData, net, confusionMatrix);
+                double accuracy = trainAndTest(trainingData, testData, numEpochs, net, verbose, numEpochsPerUpdate,
+                        numClassifications, accuracyOutput, foldNumber);
                 overallAccuracy += accuracy;
                 System.out.println("Accuracy of fold " + foldNumber + ", " + accuracy);
                 if(verbose) {
                     System.out.println("Fold " + foldNumber + ", Ending neural net structure:\n" + net.toString());
-                    System.out.println("Confusion matrix: \n" + MyTools.confusionMatrixString(trainingData.classifications, confusionMatrix) + "\n");
+
                     System.out.println("----------------------------------------------------------------------\n");
                 }
+
             }
             System.out.println("Overall accuracy of all folds: " + (overallAccuracy / crossFoldNumFolds));
         }
+        else {
+            Data testData = new Data();
+            FileIO.readFromFile(testDataFile, testData);
+
+            NeuralNet net = createNeuralNet(layerStructure, generator);
+            net.learningRate = learningRate;
+            System.out.println("Before: " + net.toString());
+            trainAndTest(data, testData, numEpochs, net, verbose, numEpochsPerUpdate, numClassifications,
+                    accuracyOutput, 0);
+            System.out.println("After: " + net.toString());
+        }
 
 
+        String[] headerLine = new String[]{"Fold Number", "Epoch", "Accuracy"};
+        FileIO.writeToFile("ANNAccuracy.csv", headerLine, accuracyOutput);
+    }
+
+    public static double trainAndTest(Data trainingData, Data testData, int numEpochs, NeuralNet net, boolean verbose,
+                                    int numEpochsPerUpdate, int numClassifications, ArrayList<String[]> accuracyOutput,
+                                      int outputLabel) {
+        for (int i = 0; i < numEpochs; i++) {
+            if(i % numEpochsPerUpdate == 0) {
+//                int[][] confusionMatrix = new int[numClassifications][numClassifications];
+                int[][] confusionMatrix = new int[numClassifications][numClassifications];
+                double accuracy = determineAccuracy(testData, net, confusionMatrix);
+                if(verbose) System.out.println("Epoch " + i + ": accuracy " + accuracy);
+                accuracyOutput.add(new String[]{"" + outputLabel, "" + i, "" + accuracy});
+            }
+            runEpoch(trainingData, net);
+        }
+        int[][] confusionMatrix = new int[numClassifications][numClassifications];
+        double accuracy = determineAccuracy(testData, net, confusionMatrix);
+        System.out.println("Confusion matrix: \n" + MyTools.confusionMatrixString(trainingData.classifications, confusionMatrix) + "\n");
+        return accuracy;
     }
 
     public static void runEpoch(Data trainingData, NeuralNet net) {
@@ -243,7 +272,7 @@ public class NeuralNet {
     public String toString() {
         String output = "";
         for (int i = 0; i < nodes.length; i++) {
-            output += Arrays.toString(nodes[i]) + "\n";
+            output += "Layer " + i + ", " + nodes[i].length + " nodes- " + Arrays.toString(nodes[i]) + "\n";
         }
         return output;
     }
