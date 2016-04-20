@@ -65,7 +65,7 @@ public class GraphDisplay extends Application {
             }
             int epochNumber = (int)row[1];
             currentSeries.getData().add(new XYChart.Data<Number, Number>(epochNumber, row[2]));
-            System.out.println("Adding " + epochNumber + ", " + row[2]);
+//            System.out.println("Adding " + epochNumber + ", " + row[2]);
         }
         lineChart.getData().add(currentSeries);
         return lineChart;
