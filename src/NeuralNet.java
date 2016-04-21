@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -5,18 +6,32 @@ import java.util.Random;
 /**
  * Created by jeff on 4/16/16.
  */
-public class NeuralNet {
+public class NeuralNet implements Serializable {
+    enum GraphType {SquaredError, Accuracy, SquaredErrorOutputOnly}
+    static GraphType graphType = GraphType.SquaredError;
     /**
      * Print some output to help guide the user on the correct use of the command line arguments
      */
     public static void printHelpString() {
-        final String helpString = "\nUsage: ./NeuralNet.sh -t trainingData.csv <optional arguments>\n\n" +
-                "Bayesian Network Implementation: Uses the K2 Algorithm" +
-                "Optional Arguments: \n" +
+        final String helpString = "\nUsage: ./NeuralNet.sh <optional arguments>\n\n" +
+                "Artificial Neural Network Implementation" +
+                "Arguments: \n" +
+                "--Create or load the network--\n" +
+                "\t-t trainingData.ser\n" +
+                "\t\tCreate a new from specific training data\n" +
+                "\t-balance\n" +
+                "\t\tDuplicate existing data points so that all classifications are equally likely\n" +
+                "\t-loadNet net.csv\n" +
+                "\t\tLoad a previously saved network\n\n" +
+
+                "--What to do with the Neural Network--\n" +
                 "\t-x NUM\n" +
                 "\t\tn-fold cross validation\n" +
-                "\t-T testData.csv\n" +
+                "\t-T testData.ser\n" +
                 "\t\tSpecify a file to use as test data\n" +
+                "\t-saveNet net.csv\n" +
+                "\t\tSave the network to a file\n\n" +
+
                 "\t-e NUM\n" +
                 "\t\tNumber of epochs to run for\n" +
                 "\t-l <layer structure>\t" +
@@ -24,9 +39,7 @@ public class NeuralNet {
                 "\t-seed NUM\n" +
                 "\t\tSpecify the seed to use for the random numbers\n" +
                 "\t-v\n" +
-                "\t\tVerbose - show information of each fold\n" +
-                "\t-balance\n" +
-                "\t\tDuplicate existing data points so that all classifications are equally likely\n";
+                "\t\tVerbose - show information of each fold\n";
 
         System.out.println(helpString);
         System.exit(1);
@@ -47,6 +60,8 @@ public class NeuralNet {
         boolean seedSpecified = false;
         double learningRate = .05;
         int numEpochsPerUpdate = 100;
+        String saveNetFilename = null;
+        String loadNetFilename = null;
 
         // read in optional arguments
         try {
@@ -93,6 +108,12 @@ public class NeuralNet {
                     case "-help":
                         printHelpString();
                         break;
+                    case "-saveNet":
+                        saveNetFilename = args[++argNum];
+                        break;
+                    case "-loadNet":
+                        loadNetFilename = args[++argNum];
+                        break;
                     default:
                         System.out.println("Unknown argument encountered: " + args[argNum] + " - use -h for help");
                         System.exit(0);
@@ -103,17 +124,44 @@ public class NeuralNet {
             printHelpString();
             System.exit(0);
         }
-        if(trainingDataFile == null) {
-            System.out.println("Training data must be specified");
+
+        // ensure either the trainingData file is specified or the neural network is going to be loaded
+        if(trainingDataFile == null && loadNetFilename == null || trainingDataFile != null && loadNetFilename != null) {
+            System.out.println("Either training data (with -t) or an existing net must be specified (with -loadNet)");
             System.exit(0);
         }
+        // ensure exactly one method of getting test data is specified
         if((testDataFile == null && crossFoldNumFolds == -1) || (testDataFile != null && crossFoldNumFolds != -1)) {
             System.out.println("Either a test data file or a number of folds for cross fold must be specified");
             System.exit(0);
         }
+        if(loadNetFilename != null) {
+            if(testDataFile == null) {
+                System.out.println("When loading a net, you must also specify a test file");
+                System.exit(2);
+            }
+            NeuralNet net = FileIO.readNet(loadNetFilename);
+            System.out.println("Loaded network: " + net.toString());
+            Data testData = new Data();
+            FileIO.readFromFile(testDataFile, testData);
+            int numClassifications = testData.classifications.size();
+            int[][] confusionMatrix = new int[numClassifications][numClassifications];
+            double accuracy = determineAccuracy(testData, net, confusionMatrix);
+            System.out.println("Confusion matrix: \n" + MyTools.confusionMatrixString(testData.classifications, confusionMatrix) + "\n");
+            System.out.println("Accuracy: " + accuracy);
+            System.exit(0);
+
+        }
+        if(saveNetFilename != null) {
+            if(crossFoldNumFolds != -1) {
+                System.out.println("It is unclear which neural net should be saved with cross fold validation");
+                System.exit(3);
+            }
+        }
+
 
         Data data = new Data();
-        if(!FileIO.readFromFile(trainingDataFile, data)) {
+        if(trainingDataFile != null && !FileIO.readFromFile(trainingDataFile, data)) {
             System.out.println("Error reading training data. Quitting");
             System.exit(1);
         }
@@ -165,7 +213,7 @@ public class NeuralNet {
             }
             System.out.println("Overall accuracy of all folds: " + (overallAccuracy / crossFoldNumFolds));
         }
-        else {
+        else if(testDataFile != null){
             Data testData = new Data();
             FileIO.readFromFile(testDataFile, testData);
 
@@ -175,6 +223,9 @@ public class NeuralNet {
             trainAndTest(data, testData, numEpochs, net, verbose, numEpochsPerUpdate, numClassifications,
                     accuracyOutput, 0);
             System.out.println("After: " + net.toString());
+            if(saveNetFilename != null) {
+                FileIO.saveNet(saveNetFilename, net);
+            }
         }
 
 
@@ -191,7 +242,28 @@ public class NeuralNet {
                 int[][] confusionMatrix = new int[numClassifications][numClassifications];
                 double accuracy = determineAccuracy(testData, net, confusionMatrix);
                 if(verbose) System.out.println("Epoch " + i + ": accuracy " + accuracy);
-                accuracyOutput.add(new String[]{"" + outputLabel, "" + i, "" + accuracy});
+                if(graphType == GraphType.Accuracy)
+                    accuracyOutput.add(new String[]{"" + outputLabel, "" + i, "" + accuracy}); // show change in accuracy over time
+                else if(graphType == GraphType.SquaredError && i > 0) {
+                    // sum the squared error over all nodes
+                    double sumOfSqauredErrors = 0;
+                    for (int rowIndex = 0; rowIndex < net.nodes.length; rowIndex++) {
+                        for (int nodeIndex = 0; nodeIndex < net.nodes[rowIndex].length; nodeIndex++) {
+                            sumOfSqauredErrors += Math.pow(net.nodes[rowIndex][nodeIndex].lastError, 2);
+                        }
+                    }
+                    accuracyOutput.add(new String[]{"" + outputLabel, "" + i, "" + sumOfSqauredErrors});
+                }
+                else if(graphType == GraphType.SquaredErrorOutputOnly) {
+                    double sum = 0;
+                    int outputRowIndex = net.nodes.length - 1;
+                    for (int nodeIndex = 0; nodeIndex < net.nodes[outputRowIndex].length; nodeIndex++) {
+                        for(DataPoint point: testData.dataPoints) {
+                            sum += Math.pow(point.classificationIndex - indexOfPrediction(net, point), 2);
+                        }
+                    }
+                    accuracyOutput.add(new String[]{"" + outputLabel, "" + i, "" + sum});
+                }
             }
             runEpoch(trainingData, net);
         }
@@ -214,19 +286,24 @@ public class NeuralNet {
     public static double determineAccuracy(Data testData, NeuralNet net, int[][] confusionMatrix) {
         int numCorrectPredictions = 0;
         for(DataPoint point: testData.dataPoints) {
-            double[] predictiveValues = net.feedForward(point);
-            double highestValue = 0;
-            int bestPrediction = -1;
-            for (int i = 0; i < predictiveValues.length; i++) {
-                if(predictiveValues[i] > highestValue) {
-                    highestValue = predictiveValues[i];
-                    bestPrediction = i;
-                }
-            }
+            int bestPrediction = indexOfPrediction(net, point);
             confusionMatrix[point.classificationIndex][bestPrediction]++;
             if(point.classificationIndex == bestPrediction) numCorrectPredictions++;
         }
         return (double)numCorrectPredictions / testData.dataPoints.size();
+    }
+
+    public static int indexOfPrediction(NeuralNet net, DataPoint point) {
+        double[] predictiveValues = net.feedForward(point);
+        double highestValue = 0;
+        int bestPrediction = -1;
+        for (int i = 0; i < predictiveValues.length; i++) {
+            if(predictiveValues[i] > highestValue) {
+                highestValue = predictiveValues[i];
+                bestPrediction = i;
+            }
+        }
+        return bestPrediction;
     }
 
     private static NeuralNet createNeuralNet(ArrayList<Integer> layerStructure, Random generator) {

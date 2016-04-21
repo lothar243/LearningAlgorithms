@@ -1,8 +1,7 @@
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,4 +115,28 @@ public class FileIO {
     }
 
 
+    public static void saveNet(String saveNetFilename, NeuralNet net) {
+        try {
+            ObjectOutput writer = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(saveNetFilename)));
+            writer.writeObject(net);
+            writer.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static NeuralNet readNet(String loadNetFilename) {
+        try {
+            ObjectInput reader = new ObjectInputStream(new BufferedInputStream(new FileInputStream(loadNetFilename)));
+            NeuralNet net = (NeuralNet)reader.readObject();
+            reader.close();
+            return net;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Error reading file");
+        return null;
+    }
 }

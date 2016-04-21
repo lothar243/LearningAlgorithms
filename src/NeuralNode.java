@@ -1,9 +1,10 @@
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
  * Created by jeff on 4/16/16.
  */
-public class NeuralNode {
+public class NeuralNode implements Serializable {
     final int numInputs;
     final double[] inputWeights;
     double lastOutput;
