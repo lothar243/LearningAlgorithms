@@ -7,8 +7,8 @@ import java.util.Random;
  * Created by jeff on 4/16/16.
  */
 public class NeuralNet implements Serializable {
-    enum GraphType {SquaredError, Accuracy, SquaredErrorOutputOnly}
-    static GraphType graphType = GraphType.SquaredError;
+    enum GraphType {SquaredError, Accuracy, SquaredErrorOutputOnly, ErrorCount}
+    static GraphType graphType = GraphType.ErrorCount;
     /**
      * Print some output to help guide the user on the correct use of the command line arguments
      */
@@ -39,7 +39,9 @@ public class NeuralNet implements Serializable {
                 "\t-seed NUM\n" +
                 "\t\tSpecify the seed to use for the random numbers\n" +
                 "\t-v\n" +
-                "\t\tVerbose - show information of each fold\n";
+                "\t\tVerbose - show information of each fold\n" +
+                "\t-showWeights\n" +
+                "\t\tShow all starting and ending neural node weights\n";
 
         System.out.println(helpString);
         System.exit(1);
@@ -55,13 +57,13 @@ public class NeuralNet implements Serializable {
         boolean balanceClasses = false;
         int numEpochs = 1;
         ArrayList<Integer> layerStructure = new ArrayList<>();
-        layerStructure.add(3);
         long seed = 0;
         boolean seedSpecified = false;
         double learningRate = .05;
         int numEpochsPerUpdate = 100;
         String saveNetFilename = null;
         String loadNetFilename = null;
+        boolean showWeights = false;
 
         // read in optional arguments
         try {
@@ -113,6 +115,9 @@ public class NeuralNet implements Serializable {
                         break;
                     case "-loadNet":
                         loadNetFilename = args[++argNum];
+                        break;
+                    case "-showWeights":
+                        showWeights = true;
                         break;
                     default:
                         System.out.println("Unknown argument encountered: " + args[argNum] + " - use -h for help");
@@ -194,19 +199,17 @@ public class NeuralNet implements Serializable {
             double overallAccuracy = 0;
             for (int foldNumber = 0; foldNumber < crossFoldNumFolds; foldNumber++) {
                 NeuralNet net = createNeuralNet(layerStructure, generator);
-                if(verbose) {
-                    System.out.println("Fold " + foldNumber + ", Beginning neural net structure:\n" + net.toString());
-                }
+                System.out.println("Fold " + foldNumber);
+                if(showWeights) System.out.println("Beginning neural net structure:\n" + net.toString());
                 net.learningRate = learningRate;
                 Data trainingData = data.getCrossFoldTrainingData(foldNumber);
                 Data testData = data.getCrossFoldTestData(foldNumber);
                 double accuracy = trainAndTest(trainingData, testData, numEpochs, net, verbose, numEpochsPerUpdate,
-                        numClassifications, accuracyOutput, foldNumber);
+                        accuracyOutput, foldNumber);
                 overallAccuracy += accuracy;
                 System.out.println("Accuracy of fold " + foldNumber + ", " + accuracy);
-                if(verbose) {
+                if(showWeights) {
                     System.out.println("Fold " + foldNumber + ", Ending neural net structure:\n" + net.toString());
-
                     System.out.println("----------------------------------------------------------------------\n");
                 }
 
@@ -219,10 +222,10 @@ public class NeuralNet implements Serializable {
 
             NeuralNet net = createNeuralNet(layerStructure, generator);
             net.learningRate = learningRate;
-            System.out.println("Before: " + net.toString());
-            trainAndTest(data, testData, numEpochs, net, verbose, numEpochsPerUpdate, numClassifications,
+            if(showWeights) System.out.println("Before: " + net.toString());
+            trainAndTest(data, testData, numEpochs, net, verbose, numEpochsPerUpdate,
                     accuracyOutput, 0);
-            System.out.println("After: " + net.toString());
+            if(showWeights) System.out.println("After: " + net.toString());
             if(saveNetFilename != null) {
                 FileIO.saveNet(saveNetFilename, net);
             }
@@ -233,18 +236,32 @@ public class NeuralNet implements Serializable {
         FileIO.writeToFile("ANNAccuracy.csv", headerLine, accuracyOutput);
     }
 
+    /**
+     * Takes a specific neural network and trains it using back propagation. After the training takes place, the data is
+     * tested against a separate data set
+     * @param trainingData The data used to train the neural net
+     * @param testData The data used to test against
+     * @param numEpochs The number of complete
+     * @param net A starting neural net
+     * @param verbose True to output more information to the console
+     * @param numEpochsPerUpdate Frequency of testing the data for the various reports
+     * @param accuracyOutput A list that will be written to file which is later used to generate the graph
+     * @param outputLabel The current fold number - only used in generating the graph
+     * @return The final accuracy of the neural net in predicting the test data
+     */
     public static double trainAndTest(Data trainingData, Data testData, int numEpochs, NeuralNet net, boolean verbose,
-                                    int numEpochsPerUpdate, int numClassifications, ArrayList<String[]> accuracyOutput,
+                                    int numEpochsPerUpdate, ArrayList<String[]> accuracyOutput,
                                       int outputLabel) {
-        for (int i = 0; i < numEpochs; i++) {
-            if(i % numEpochsPerUpdate == 0) {
+        int numClassifications = trainingData.classifications.size();
+        for (int epochNum = 0; epochNum < numEpochs; epochNum++) {
+            if(epochNum % numEpochsPerUpdate == 0) {
 //                int[][] confusionMatrix = new int[numClassifications][numClassifications];
                 int[][] confusionMatrix = new int[numClassifications][numClassifications];
                 double accuracy = determineAccuracy(testData, net, confusionMatrix);
-                if(verbose) System.out.println("Epoch " + i + ": accuracy " + accuracy);
+//                if(verbose) System.out.println("Epoch " + epochNum + ": accuracy " + accuracy);
                 if(graphType == GraphType.Accuracy)
-                    accuracyOutput.add(new String[]{"" + outputLabel, "" + i, "" + accuracy}); // show change in accuracy over time
-                else if(graphType == GraphType.SquaredError && i > 0) {
+                    accuracyOutput.add(new String[]{"" + outputLabel, "" + epochNum, "" + accuracy}); // show change in accuracy over time
+                else if(graphType == GraphType.SquaredError && epochNum > 0) {
                     // sum the squared error over all nodes
                     double sumOfSqauredErrors = 0;
                     for (int rowIndex = 0; rowIndex < net.nodes.length; rowIndex++) {
@@ -252,7 +269,7 @@ public class NeuralNet implements Serializable {
                             sumOfSqauredErrors += Math.pow(net.nodes[rowIndex][nodeIndex].lastError, 2);
                         }
                     }
-                    accuracyOutput.add(new String[]{"" + outputLabel, "" + i, "" + sumOfSqauredErrors});
+                    accuracyOutput.add(new String[]{"" + outputLabel, "" + epochNum, "" + sumOfSqauredErrors});
                 }
                 else if(graphType == GraphType.SquaredErrorOutputOnly) {
                     double sum = 0;
@@ -262,7 +279,18 @@ public class NeuralNet implements Serializable {
                             sum += Math.pow(point.classificationIndex - indexOfPrediction(net, point), 2);
                         }
                     }
-                    accuracyOutput.add(new String[]{"" + outputLabel, "" + i, "" + sum});
+                    accuracyOutput.add(new String[]{"" + outputLabel, "" + epochNum, "" + sum});
+                }
+                else if(graphType == GraphType.ErrorCount) {
+                    int totalErrors = 0;
+                    for (int row = 0; row < confusionMatrix.length; row++) {
+                        for (int col = 0; col < confusionMatrix[row].length; col++) {
+                            if(row != col) {
+                                totalErrors += confusionMatrix[row][col];
+                            }
+                        }
+                    }
+                    accuracyOutput.add(new String[]{"" + outputLabel, "" + epochNum, "" + totalErrors});
                 }
             }
             runEpoch(trainingData, net);
@@ -273,6 +301,11 @@ public class NeuralNet implements Serializable {
         return accuracy;
     }
 
+    /**
+     * Uses each dataPoint exactly once to train the neural net via back propagation
+     * @param trainingData The data being used for training
+     * @param net The current neural net
+     */
     public static void runEpoch(Data trainingData, NeuralNet net) {
         for(DataPoint point: trainingData.dataPoints) {
             net.feedForward(point);
@@ -283,6 +316,14 @@ public class NeuralNet implements Serializable {
         }
     }
 
+    /**
+     * Determines the accuracy of the current neural net in predicting the test data
+     * @param testData The data to test against
+     * @param net The neural net being tested
+     * @param confusionMatrix An already initialized n by n matrix where n is the number of classifications. This will
+     *                        be indexed by [actualClassification][predictedClassification]
+     * @return The accuracy: number correct divided by total number predicted
+     */
     public static double determineAccuracy(Data testData, NeuralNet net, int[][] confusionMatrix) {
         int numCorrectPredictions = 0;
         for(DataPoint point: testData.dataPoints) {
@@ -293,6 +334,12 @@ public class NeuralNet implements Serializable {
         return (double)numCorrectPredictions / testData.dataPoints.size();
     }
 
+    /**
+     * Make a prediction about the classification of a single point
+     * @param net The neural net being used to make the prediction
+     * @param point The point whose classification is being predicted
+     * @return The the index of the most likely classification
+     */
     public static int indexOfPrediction(NeuralNet net, DataPoint point) {
         double[] predictiveValues = net.feedForward(point);
         double highestValue = 0;
@@ -306,8 +353,13 @@ public class NeuralNet implements Serializable {
         return bestPrediction;
     }
 
+    /**
+     * Initializes a neural net with a specific structure using a specified seed for the random values
+     * @param layerStructure Num inputs, num nodes in first layer, num nodes in first hidden layer, ..., num outputs
+     * @param generator An random number generator, potentially initialized with a specified seed
+     * @return A neural net with the specified structure and random weights
+     */
     private static NeuralNet createNeuralNet(ArrayList<Integer> layerStructure, Random generator) {
-//        System.out.println("structure: " + layerStructure.toString());
         double[][][] weights = new double[layerStructure.size() - 1][][];
         int numLayers = layerStructure.size() - 1;
         for (int layerIndex = 0; layerIndex < numLayers; layerIndex++) {
@@ -319,7 +371,6 @@ public class NeuralNet implements Serializable {
                 for (int inputIndex = 0; inputIndex < numWeights; inputIndex++) {
                     weights[layerIndex][nodeIndex][inputIndex] = .05 * generator.nextDouble();
                 }
-//                System.out.println("layer " + layerIndex + ", node " + nodeIndex + ": " + Arrays.toString(weights[layerIndex][nodeIndex]));
             }
         }
         return new NeuralNet(weights);
@@ -335,6 +386,11 @@ public class NeuralNet implements Serializable {
         numLayers = 0;
         nodes = new NeuralNode[0][0];
     }
+
+    /**
+     * Create a neural net with specific weights. The structure is implied by specifying the weights
+     * @param inputWeights indexed by [layer][node][weightIndex]. The bias weight comes at the end
+     */
     public NeuralNet(double[][][] inputWeights) {
         numLayers = inputWeights.length;
         nodes = new NeuralNode[numLayers][];
@@ -353,6 +409,12 @@ public class NeuralNet implements Serializable {
         }
         return output;
     }
+
+    /**
+     * Evaluate the neural net for a specific set of inputs
+     * @param point The inputs
+     * @return The values of each of the outputs
+     */
     public double[] feedForward(DataPoint point) {
         int numAttributes = point.attributes.length;
         double[] inputs = new double[numAttributes];
@@ -376,8 +438,11 @@ public class NeuralNet implements Serializable {
         return outputs;
     }
 
+    /**
+     * Train the network so that the last evaluated set of inputs gets a little bit closer to an expected set of output
+     * @param targets The desired outputs
+     */
     public void backPropagate(double[] targets) {
-//        System.out.println("BackPropagating: " + Arrays.toString(targets));
         // first determine all of the error values, starting with the output layer
         int layerIndex = nodes.length-1;
         int numNodesInLayer = nodes[layerIndex].length;

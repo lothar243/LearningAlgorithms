@@ -32,6 +32,10 @@ public class GraphDisplay extends Application {
 
     }
 
+    /**
+     * Reads the ANNAccuracy.csv to create a graph
+     * @return
+     */
     private LineChart<Number, Number> createChart() {
         ArrayList<double[]> rows = readDoubleSpreadsheet("ANNAccuracy.csv");
         ArrayList<Integer> foldnumbers = new ArrayList<>();
@@ -44,7 +48,7 @@ public class GraphDisplay extends Application {
         final NumberAxis xAxis = new NumberAxis();
         xAxis.setLabel("Epoch number");
         final NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Accuracy");
+        yAxis.setLabel("Errors per epoch");
         final LineChart<Number, Number> lineChart = new LineChart<Number, Number>(xAxis, yAxis);
 
         XYChart.Series currentSeries = null;
@@ -71,6 +75,11 @@ public class GraphDisplay extends Application {
         return lineChart;
     }
 
+    /**
+     * Read a particular comma separated file where all of the entries are expected to be double
+     * @param filename The name of the input file
+     * @return The values that were read from the file
+     */
     public static ArrayList<double[]> readDoubleSpreadsheet(String filename) {
         try {
             CSVReader reader = new CSVReader(new FileReader(filename));
