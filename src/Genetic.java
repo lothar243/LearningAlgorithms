@@ -1,8 +1,7 @@
 import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -16,16 +15,41 @@ public class Genetic {
 
 
     public static void main(String[] args) {
-        greedy();
+
+        geneticAlgorithm(args);
     }
 
-    public static void geneticAlgorithm() {
-        int numGenerations = 100;
-        int numOffspringPerGeneration = 100;
-        int populationSize = 100;
+    public static void geneticAlgorithm(String[] args) {
+        int numGenerations = 200;
+        int numOffspringPerGeneration = 1000;
+        int populationSize = 1000;
         int tournamentSize = 10;
         int numElitesToPreserve = 10;
-        int numGenerationsPerUpdate = 5;
+        int numGenerationsPerUpdate = 1;
+        int avgMutations = 1;
+
+        for (int argNum = 0; argNum < args.length; argNum++) {
+            switch (args[argNum].toLowerCase()) {
+                case "-numgenerations":
+                    numGenerations = Integer.parseInt(args[++argNum]);
+                    break;
+                case "-numoffspring":
+                    numOffspringPerGeneration = Integer.parseInt(args[++argNum]);
+                    break;
+                case "-populationsize":
+                    populationSize = Integer.parseInt(args[++argNum]);
+                    break;
+                case "-tournamentsize":
+                    tournamentSize = Integer.parseInt(args[++argNum]);
+                    break;
+                case "-numElites":
+                    numElitesToPreserve = Integer.parseInt(args[++argNum]);
+                    break;
+                case "-avgMutations":
+                    avgMutations = Integer.parseInt(args[++argNum]);
+                    break;
+            }
+        }
 
 
         ItemCollection.items = readItemsFromFile("items.csv");
@@ -33,7 +57,7 @@ public class Genetic {
             System.out.println("Too many items for this implementation");
             System.exit(TOO_MANY_ITEMS);
         }
-        Geometric.setChanceOfMutation(random, (double)1/50);
+        Geometric.setChanceOfMutation(random, (double)avgMutations/50);
         ItemCollection.random = random;
 
         ArrayList<ItemCollection> itemCollections = new ArrayList<>();
@@ -41,6 +65,7 @@ public class Genetic {
             ItemCollection currentCollection = new ItemCollection(random.nextLong());
             itemCollections.add(currentCollection);
         }
+        ArrayList<long[]> generationalStatsList = new ArrayList<>();
 
         for (int generationNumber = 0; generationNumber < numGenerations; generationNumber++) {
             for (int offspringNum = 0; offspringNum < numOffspringPerGeneration; offspringNum++) {
@@ -48,9 +73,12 @@ public class Genetic {
             }
             itemCollections = cullPopulation(itemCollections, numElitesToPreserve, populationSize);
             if(generationNumber % numGenerationsPerUpdate == 0) {
-                System.out.println("Generation " + generationNumber + ", " + Arrays.toString(generationalStats(itemCollections)) + ", best: " + bestCollection.toString());
+                long[] genStats = generationalStats(itemCollections);
+                generationalStatsList.add(genStats);
+                System.out.println("Generation " + generationNumber + ", " + Arrays.toString(genStats) + ", best: " + bestCollection.toString());
             }
         }
+        writeStatsToFile("genStats.csv", generationalStatsList);
     }
 
     public static void bruteForce() {
@@ -127,17 +155,33 @@ public class Genetic {
     }
 
     public static ArrayList<ItemCollection> randomParents(ArrayList<ItemCollection> itemCollections, int tournamentSize) {
-        ArrayList<Integer> indices = new ArrayList<>(itemCollections.size());
-        for (int i = 0; i < itemCollections.size(); i++) {
-            indices.add(i);
-        }
-        Collections.shuffle(indices);
+//        ArrayList<Integer> indices = new ArrayList<>(itemCollections.size());
+//        for (int i = 0; i < itemCollections.size(); i++) {
+//            indices.add(i);
+//        }
+//        Collections.shuffle(indices);
+//        ArrayList<ItemCollection> parents = new ArrayList<>(tournamentSize);
+//        for (int i = 0; i < tournamentSize; i++) {
+//            parents.add(itemCollections.get(indices.get(i)));
+//        }
+//        return parents;
+        ArrayList<Integer> indices = randomSample(itemCollections.size(), tournamentSize);
         ArrayList<ItemCollection> parents = new ArrayList<>(tournamentSize);
-        for (int i = 0; i < tournamentSize; i++) {
-            parents.add(itemCollections.get(indices.get(i)));
+        for(Integer index: indices) {
+            parents.add(itemCollections.get(index));
         }
         return parents;
     }
+
+    private static ArrayList<Integer> randomSample(int numCollections, int sampleSize) {
+        ArrayList<Integer> sample = new ArrayList<>();
+        while(sample.size() < sampleSize) {
+            int index = (int) (numCollections * random.nextDouble());
+            if(!sample.contains(index)) sample.add(index);
+        }
+        return sample;
+    }
+
 
     public static int randomProportionalToFitness(ArrayList<ItemCollection> itemCollections) {
         long sum = 0;
@@ -220,16 +264,6 @@ public class Genetic {
             mutate();
         }
 
-        private int randomIndex(ArrayList<ItemCollection> parents, double sum) {
-            double firstParentTotal = random.nextDouble() * sum;
-            for (int i = 0; i < parents.size(); i++) {
-                firstParentTotal -= parents.get(i).getFitness();
-                if(firstParentTotal <= 0) {
-                    return i;
-                }
-            }
-            return 0;
-        }
 
         public void mutate() {
 //            int numChanges = 0;
@@ -248,8 +282,8 @@ public class Genetic {
             for (int bit = 63; bit >= 0; bit--) {
                 output += (bitVector & (1L << bit)) > 0 ? 1 : 0;
                 if(bit % 5 == 0) output += " ";
-            }
-            output += ", bitVectorValue: " + bitVector + ", totalPrice: " + totalPrice + ", totalWeight: " + totalWeight + ", fitness: " + fitness;
+            } //", bitVectorValue: " + bitVector +
+            output += ", totalPrice: " + totalPrice + ", totalWeight: " + totalWeight + ", fitness: " + fitness;
             return output;
         }
 
@@ -299,6 +333,22 @@ public class Genetic {
         }
         return null;
     }
+    public static void writeStatsToFile(String fileName, ArrayList<long[]> stats) {
+        ArrayList<String[]> lines = new ArrayList<>();
+        lines.add(new String[]{"maxFitness","avgFitness","minFitness"});
+        for (int i = 0; i < stats.size(); i++) {
+            lines.add(new String[]{"" + stats.get(i)[0], "" + stats.get(i)[1], "" + stats.get(i)[2]});
+        }
+        try {
+            CSVWriter writer = new CSVWriter(new FileWriter(fileName));
+            writer.writeAll(lines);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public static class Item {
         final int weight, price;
         public Item(int weight, int price) {
