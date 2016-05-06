@@ -33,7 +33,7 @@ public class NeuralNetTest extends NeuralNet {
 
 
         NeuralNet net = new NeuralNet(weights);
-        net.learningRate = .001;
+        net.learningRate = .05;
         double[] feedFordwardOutput = net.feedForward(new double[]{1, 1});
         assertEquals(.52562, feedFordwardOutput[0], .00001);
         assertEquals(.52562, feedFordwardOutput[1], .00001);
