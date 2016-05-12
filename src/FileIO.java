@@ -3,6 +3,7 @@ import com.opencsv.CSVWriter;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -28,6 +29,7 @@ public class FileIO {
 
             // now read the file in a line at a time and add the entry
             String [] line;
+            System.out.println("attribute names: " + Arrays.toString(attributeNames));
             // keep reading until we reach the end of the file
             while((line = reader.readNext()) != null) {
                 // ignore blank lines
